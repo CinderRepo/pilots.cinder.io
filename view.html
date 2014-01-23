@@ -241,11 +241,11 @@
 <template name="uploadTest">
   {{#if currentUser}}
     {{> queueControl}}
+    {{> fileTable}}
   {{else}}
     {{> loggedOutNotice}}
   {{/if}}
   <br/>
-  {{> fileTable}}
 </template>
 
 <template name="connectionStatus">
