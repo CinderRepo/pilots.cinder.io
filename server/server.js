@@ -1,4 +1,4 @@
-  
+
 	Meteor.publish("users", function () {
   	return Meteor.users.find({}, {fields: {emails: true, username:true, profile: true, services: true}});
 	});
@@ -20,7 +20,7 @@
                 buffer[i] = myText.charCodeAt(i);
 
 
-            Filesystem.storeBuffer('My server uploaded file.txt', buffer, { 
+            Filesystem.storeBuffer('My server uploaded file.txt', buffer, {
                 contentType: 'text/plain',          // Set a contentType (optional)
                 owner: this.userId                  // Set a user id (optional)
                 //noProgress: true,                 // Stop live update of progress (optional default to false)
@@ -32,6 +32,6 @@
 
   Meteor.startup(function () {
     // code to run on server at startup
-    console.log("----== Gi-collectionFS ==----");
+    console.log("----== Cinder Pilots Upload ==----");
     //Filesystem.remove({});
-  }); 
+  });
