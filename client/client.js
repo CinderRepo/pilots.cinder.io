@@ -322,9 +322,3 @@ Template.connectionStatus.connection = function() {
   Meteor.status().waiting = (Meteor.status().status == 'waiting');
   return Meteor.status();
 };
-
-Template.mainMenu.events({
-  'click .btnMainMenuDashboard' : function () {
-    console.log("log: goto dashboard");
-  }
-});
