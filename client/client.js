@@ -86,7 +86,7 @@ Template.queueControl.events({
     var filter = Session.get('filter');
     if ( value == true) filter.reversed = true;
     if ( value == false) filter.reversed = false;
-    Session.set('filter', filter);    
+    Session.set('filter', filter);
   },
   'change #sortby': function(e, temp) {
     var value = temp.find('#sortby').value;
@@ -187,16 +187,16 @@ Template.fileTable.helpers({
   progress : function() {
     var filesProgress = Math.round(this.currentChunk / (this.countChunks - 1) * 100);
     var queueProgress = Filesystem.queue.progress(this._id);
-    var responsiveProgress = Math.max(filesProgress, queueProgress); 
+    var responsiveProgress = Math.max(filesProgress, queueProgress);
     var fileInQue = Filesystem.queue.getItem(this._id);
-    
+
     if (this.complete && !this.download) {
     //downloaded og i kø grøn
       if (fileInQue) {
         if (Filesystem.queue.isPaused()) {
           if (queueProgress == 100) {
             return { barAStyle: 'bar-success', barBStyle:'progress-info', progressA: 100, progressB: 0};
-          } else { 
+          } else {
             return { barAStyle: 'bar-warning', barBStyle:'progress-info', progressA: queueProgress, progressB: 100-queueProgress};
           }
         } else {
@@ -213,7 +213,7 @@ Template.fileTable.helpers({
           if (this.download) {
             if (queueProgress == 100) {
               return { barAStyle: 'bar-success', barBStyle:'progress-info', progressA: responsiveProgress, progressB: 100-responsiveProgress};
-            } else { 
+            } else {
               return { barAStyle: 'bar-warning', barBStyle:'bar-danger', progressA: responsiveProgress, progressB: 100-responsiveProgress};
             }
           } else {
@@ -229,7 +229,7 @@ Template.fileTable.helpers({
               return { barAStyle: 'bar-warning', barBStyle:'progress-info', progressA: responsiveProgress, progressB: 100-responsiveProgress};
             }
           } else {
-            return { barAStyle: 'bar-success', barBStyle:'bar-warning', progressA: filesProgress, progressB: 100-filesProgress}; //queue - 
+            return { barAStyle: 'bar-success', barBStyle:'bar-warning', progressA: filesProgress, progressB: 100-filesProgress}; //queue -
           }
           //download igang grøn, blå
         }
@@ -263,7 +263,7 @@ Template.fileTable.helpers({
         //In progress
         if (Filesystem.queue.isPaused())
           return 'Paused'
-        else 
+        else
           return 'In progress';
       } else {
         //Failed
@@ -281,9 +281,9 @@ Template.fileTable.helpers({
       if (Filesystem.queue.getItem(this._id)) {
         //In progress
       if (Filesystem.queue.isPaused()) {
-        return 'label-warning'; 
+        return 'label-warning';
       } else {
-        return 'label-info'; 
+        return 'label-info';
       } //EO paused
       } else {
         //Failed
@@ -301,9 +301,9 @@ Template.fileTable.helpers({
   }, //EO resume
   ownerUsername : function () {
     //lookup
-    return extractProfile(this.owner).username; 
+    return extractProfile(this.owner).username;
   },
-  isDownloading: function() { 
+  isDownloading: function() {
     return Filesystem.queue.isDownloading(this._id);
   },
   filehanderSupported: function() {
@@ -316,21 +316,6 @@ Template.imageList.helpers({
   fileHandler: function(){
     return _.toArray(this.fileHandler);
   }
-});
-
-Template.supportInfo.helpers({
-  filehandlerSupported: function() {
-    return __meteor_runtime_config__.FILEHANDLER_SUPPORTED;
-  },
-  filehandlerSymlinks: function() {
-    return Filesystem.filehandlerSupport.symlinks;
-  },
-  filehandlerFilewrites: function() {
-    return Filesystem.filehandlerSupport.filewrites;
-  },
-  filehandlerBundle: function() {
-    return __meteor_runtime_config__.FILEHANDLER_BUNDLE;
-  }  
 });
 
 Template.connectionStatus.connection = function() {
