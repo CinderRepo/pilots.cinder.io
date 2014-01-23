@@ -3,7 +3,6 @@
   <meta http-equiv="Content-Type" content="text/ html; charset=UTF-8" />
 </head>
 <body>
-  <a href="https://github.com/raix/Meteor-CollectionFS.git"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
   <div class="navbar navbar-inverse navbar-static-top">
     <!-- Main menu bar -->
     <div class="navbar-inner">
@@ -14,16 +13,14 @@
           <span class="icon-bar"></span>
         </button>
 
-        <a class="brand" href="#">Gi-CollectionFS{{> connectionStatus}}</a>
+        <a class="brand" href="#">Pilots.cinder.io{{> connectionStatus}}</a>
         <!-- Main menu Current Folder -->
         {{loginButtons}}
-
-        {{> mainMenu}}
-      </div> <!-- container -->  
+      </div> <!-- container -->
     </div> <!-- EO navbar inner -->
   </div> <!-- EO navbar top -->
-  
-  <div class="container-fluid"> 
+
+  <div class="container-fluid">
     <div class="row-fluid">
       <!-- Side bar -->
       <div class="span2">
@@ -33,7 +30,7 @@
       <div class="span10">
 
         {{> uploadTest}}
-        
+
       </div> <!-- EO Body content -->
     </div> <!-- EO row -->
   </div> <!-- EO container fluid -->
@@ -43,32 +40,6 @@
   <br/>
 
 </body>
-
-<template name="loginInto">
-  <table class="table-bordered" width="100%">
-    <tr>
-      <td>
-        <h3>Log in'n try uploading</h3>
-        <i>Login and upload some files and test pause/start + resume capabilities after connection loss or browser crash..</i><br/>
-        <br/>
-        In short: CollectionFS is a GridFS like storage build on Meteor and node.js<br/>
-        <br/>
-        Files can be converted from database to filesystem via simple filehandlers<br/>
-        Filehandlers can also be used to convert images, sound, video, doc, pdf etc. eg. for a 40x40px img using imagemagick. Or upload to remote server. The client is reactivly updated as filehandling finishes.
-        <pre>
-Filesystem.fileHandlers({
-  default1: function(options) {
-    //passthrough to cache or change the data `options.blob` and `options.fileRecord`
-    return { blob: options.blob, fileRecord: options.fileRecord }; //if no blob then save result in fileURL (added createdAt)
-  }
-});</pre>
-        <br/>
-        Do check out the readme on Git, more details on design and usage.
-        <i>Well, got a bit optimized and runs in 0.6.0, Nice job Meteor guys!</i>     
-      </td>
-   </tr>
-  </table> 
-</template>
 
 <template name="dropzone">
   <div id="dropzone" class="dropzone">
@@ -84,7 +55,7 @@ Filesystem.fileHandlers({
         <input name="files" type="file" class="fileUploader" multiple>
         <br/>
         <br/>
-        
+
         <a href="#" class="btn btn-success btnCreateServerFile"><i class="icon-plus icon-white"></i>Create</a><br/>
         <small>Created a text file on the server</small>
       </td><td colspan="2">
@@ -147,7 +118,7 @@ Filesystem.fileHandlers({
         {{/with}}
       </td>
    </tr>
-  </table> 
+  </table>
   <i>There are 5 test filehandlers, each just makes a copy of db file onto the filesystem. In this demo the custom rule is: 4 of them only run if size not bigger than 5Mb and mime-type is 'image/jpeg'</i><br/>
 </template>
 
@@ -213,10 +184,10 @@ Filesystem.fileHandlers({
         {{/if}}
       </td>
       <td>{{niceSize}}</td>
-      <td>        
+      <td>
         <span class="label {{transfereStyleBS}}">
           {{transfereText}}
-        </span> 
+        </span>
       </td>
       <td>{{filename}}</td>
       <td>
@@ -243,7 +214,7 @@ Filesystem.fileHandlers({
   </table>
 </template>
 
-<template name="viewImage">   
+<template name="viewImage">
   <!-- Modal -->
   <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
@@ -283,22 +254,12 @@ Filesystem.fileHandlers({
 <template name="uploadTest">
   {{#if currentUser}}
     {{> supportInfo}}
-    {{> queueControl}} 
+    {{> queueControl}}
   {{else}}
-    {{> loginInto}}
     {{> supportInfo}}
   {{/if}}
   <br/>
   {{> fileTable}}
-</template>
-
-<template name="mainMenu">
-  <!-- Menu collapsed -->
-  <div id="mainMenu" class="nav-collapse collapse">
-    <ul class="nav">
-      <li><a href="#" class="btnMainMenuDashboard" data-toggle="collapse" data-target=".nav-collapse">collectionFS</a></li>
-    </ul>
-  </div>
 </template>
 
 <template name="connectionStatus">
