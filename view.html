@@ -231,32 +231,18 @@
   </div>
 </template>
 
-<template name="supportInfo">
-  {{#if filehandlerSupported}}
-    <div class="alert alert-success">
+<template name="loggedOutNotice">
+    <div class="alert alert">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
-      Congrats! Filehandlers are supported in bundles, enjoy!<br/>
-      <small>
-        Got fast! and now supports Meteor 0.6.0! <br/>
-        <i>Sorry I had to remove all the files due to deprecation of '.len'<br/>
-          Currently thinking about "server, fetch remote file for the client" + test GraphicsMagick</i>
-      </small>
+      Log in to start uploading!<br/>
     </div>
-  {{else}}
-    <div class="alert alert-error">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      Serverside filehandling not supported on this server, app need read/write access in order to save uploaded files
-    </div>
-  {{/if}}
-
 </template>
 
 <template name="uploadTest">
   {{#if currentUser}}
-    {{> supportInfo}}
     {{> queueControl}}
   {{else}}
-    {{> supportInfo}}
+    {{> loggedOutNotice}}
   {{/if}}
   <br/>
   {{> fileTable}}
