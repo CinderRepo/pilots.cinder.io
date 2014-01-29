@@ -1,0 +1,279 @@
+@import "nib"
+@import "variables"
+
+body
+  width 100%
+  height 100%
+  user-select none
+
+.sidebar
+  position fixed
+  top 0
+  bottom 0
+  width 170px
+  //background midnight()
+  //color white()
+  color midnight()
+  overflow-y scroll
+  overflow-x hidden
+  &.right
+    right 0
+    border-left 1px solid offWhite()
+  &.left
+    left 0
+    border-right 1px solid offWhite()
+  .create
+    size(170,170)
+    //background gray()
+    border-bottom 1px solid offWhite()
+  .title
+    padding-left 10px
+    padding-right 10px
+    futura()
+    color offGray()
+    font-size 10px
+    text-align left
+  .logo
+    margin-bottom 10px
+    padding 0 10px 0 50px
+    height 50px
+    line-height 50px
+    display block
+    futura()
+    font-size 18px
+    text-align left
+    .icon
+      size(30,30)
+      border-radius 30px
+      position absolute
+      top 10px
+      left 10px
+      //background white()
+      background midnight()
+  .list
+    margin-bottom 20px
+    .item
+      .link
+        padding-left 34px
+        padding-right 10px
+        position relative
+        font-size 14px
+        height 30px
+        line-height 30px
+        display block
+        &:hover
+          background gray()
+        .icon
+          position absolute
+          top 7px
+          left 10px
+          size(16,16)
+          //background white()
+          background midnight()
+          border-radius 16px
+.content
+  position absolute
+  top 0
+  right 170px
+  bottom 0
+  left 170px
+  overflow-y auto
+  overflow-x hidden
+  //margin-right 170px
+  //margin-left 170px
+  //height 10000px
+.toggle
+  size(16,16)
+  border-radius 16px
+  position absolute
+  top 17px
+  background midnight()
+  cursor pointer
+  &.left
+    left 10px
+  &.right
+    right 10px
+.title
+  //text-align center
+  padding 0 40px 0 40px
+  line-height 50px
+  futura()
+  font-size 24px
+  color offGray()
+.tiles
+  width 940px
+  height 2000px
+  margin 0 auto
+  padding-right 5px
+  padding-left 5px
+.tile
+  width 300px
+  height 210px
+  float left
+  margin-top 10px
+  margin-right 5px
+  margin-left 5px
+  cursor pointer
+  .preview
+    width 300px
+    height 169px
+    background midnight()
+    border-radius 4px
+  .title
+    font-size 14px
+    padding 0
+    line-height 20px
+    text-align left
+  .subtitle
+    font-size 12px
+    futura()
+    text-align left
+    line-height 14px
+    color offerGray()
+
+//Tiles Media Queries -> Both Sidebars Open
+//One Column
+@media all and (min-width: 660px) and (max-width: 970px)
+  .tiles
+    //background blue
+    width 320px
+//Two Column
+@media all and (min-width: 970px) and (max-width: 1280px)
+  .tiles
+    //background red
+    width 630px
+//Three Column
+@media all and (min-width: 1280px) and (max-width: 1590px)
+  .tiles
+    //background green
+    width 940px
+//Four Column
+@media all and (min-width: 1590px) and (max-width: 1900px)
+  .tiles
+    //background pink
+    width 1250px
+//Five Column
+@media all and (min-width: 1900px) and (max-width: 2210px)
+  .tiles
+    //background purple
+    width 1560px
+//Six Column
+@media all and (min-width: 2210px) and (max-width: 2520px)
+  .tiles
+    //background yellow
+    width 1870px
+//Seven Column
+@media all and (min-width: 2520px) and (max-width: 2830px)
+  .tiles
+    //background orange
+    width 2180px
+//Eight Column
+@media all and (min-width: 2830px) and (max-width: 3140px)
+  .tiles
+    //background brown
+    width 2490px
+//Nine Column
+@media all and (min-width: 3140px) and (max-width: 3450px)
+  .tiles
+    //background aqua
+    width 2800px
+//Ten Column
+@media all and (min-width: 3450px) and (max-width: 3760px)
+  .tiles
+    //background lime
+    width 3110px
+
+
+//Tiles Media Queries -> One Sidebar Open
+
+//Tiles Media Queries -> No Sidebars Open
+
+//Tiles Media Queries -> Mobile
+
+//Click Menu
+.clickMenu
+  position absolute
+  .node
+    size(40,40)
+    position absolute
+    top 0
+    right 0
+    bottom 0
+    left 0
+    //border-radius 40px
+    //border 2px solid midnight()
+    //background transparent
+    z-index 99
+    transition opacity 100ms ease-out, transform 100ms ease-out
+    opacity 0
+    transform translate3d(0,0,0)
+    //pointer-events none
+    cursor pointer
+    &.origin
+      transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
+      .dot
+        transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
+    .dot
+      size(40,40)
+      border-radius 40px
+      border 2px solid midnight()
+      background transparent
+      position absolute
+      top 0
+      right 0
+      bottom 0
+      left 0
+      transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
+      transform scale3d(0,0,0)
+      .inner
+        size(40,40)
+        border-radius 40px
+        background midnight()
+        position absolute
+        top 50%
+        left 50%
+        margin -20px auto auto -20px
+        transition transform 400ms ease-out
+        transform-origin 50% 50%
+        transform scale3d(0.2,0.2,0.2)
+  &.activated
+    .node
+      opacity 1
+      transition opacity 100ms ease-out 400ms, transform 100ms ease-out 400ms
+      &.hovered
+        .dot
+          transform scale3d(1.3,1.3,1.3)
+      &.origin
+        transition opacity 100ms ease-out, transform 100ms ease-out
+        .dot
+          transition opacity 100ms ease-out, transform 100ms ease-out
+      &.top
+        transform translate3d(0,-80px,0)
+        //transition opacity 100ms ease-out 400ms, transform 100ms ease-out 400ms
+        &.right
+          transform translate3d(60px,-60px,0)
+          //transition opacity 100ms ease-out 650ms, transform 100ms ease-out 650ms
+        &.left
+          transform translate3d(-60px,-60px,0)
+          //transition opacity 100ms ease-out 950ms, transform 100ms ease-out 950ms
+      &.right
+        transform translate3d(80px,0,0)
+        //transition opacity 100ms ease-out 700ms, transform 100ms ease-out 700ms
+      &.bottom
+        transform translate3d(0,80px,0)
+        //transition opacity 100ms ease-out 800ms, transform 100ms ease-out 800ms
+        &.right
+          transform translate3d(60px,60px,0)
+          //transition opacity 100ms ease-out 750ms, transform 100ms ease-out 750ms
+        &.left
+          transform translate3d(-60px,60px,0)
+          //transition opacity 100ms ease-out 850ms, transform 100ms ease-out 850ms
+      &.left
+        transform translate3d(-80px,0,0)
+        //transition opacity 100ms ease-out 900ms, transform 100ms ease-out 900ms
+      &.origin
+        .inner
+          transform scale3d(1,1,1)
+      .dot
+        transition transform 100ms ease-out
+        transform scale3d(1,1,1)

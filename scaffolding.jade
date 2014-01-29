@@ -1,0 +1,140 @@
+head
+  title Pilots
+
+body
+  +leftSidebar
+  +main
+  +rightSidebar
+  +clickMenu
+
+template(name="leftSidebar")
+  .sidebar.left
+    a.logo
+      .icon
+      | Cinder
+    .title Browse
+    ul.list
+      li.item
+        a.link(href="")
+          .icon
+          | Pitches
+      li.item
+        a.link(href="")
+          .icon
+          | Trailers
+      li.item
+        a.link(href="")
+          .icon
+          | Pilots
+      li.item
+        a.link(href="")
+          .icon
+          | Releases
+    .title Account
+    ul.list
+      li.item
+        a.link(href="")
+          .icon
+          | Login
+      li.item
+        a.link(href="")
+          .icon
+          | Signup
+
+template(name="rightSidebar")
+  .sidebar.right
+    .create
+    ul.list
+      li.item
+        a.link(href="")
+          .icon
+          | Play
+      li.item
+        a.link(href="")
+          .icon
+          | About
+      li.item
+        a.link(href="")
+          .icon
+          | Community
+
+template(name="main")
+  .content
+    .toggle.left(data-action="toggleSidebar",data-sidebar="left")
+    .toggle.right(data-action="toggleSidebar",data-sidebar="right")
+    .title Trailers
+    .tiles
+      a.tile(href="hello")
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+      .tile
+        .preview
+        .title Life in a Day
+        .subtitle Ridley Scott
+
+template(name="clickMenu")
+  .clickMenu
+    .node.origin
+      .dot
+        .inner
+    .node.top(data-action="fund")
+      .dot
+        .inner
+    .node.top.right(data-action="filter")
+      .dot
+        .inner
+    .node.right(data-action="play")
+      .dot
+        .inner
+    .node.bottom.right(data-action="createTopic")
+      .dot
+        .inner
+    .node.bottom(data-action="addMedia")
+      .dot
+        .inner
+    .node.bottom.left(data-action="addPoll")
+      .dot
+        .inner
+    .node.left(data-action="editTopic")
+      .dot
+        .inner
+    .node.top.left(data-action="follow")
+      .dot
+        .inner

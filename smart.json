@@ -1,0 +1,14 @@
+{
+  "packages": {
+    "iron-router": {
+      "git": "https://github.com/EventedMind/iron-router.git",
+      "branch": "cmather"
+    },
+    "jade": {},
+    "autoform": {
+      "git": "https://github.com/aldeed/meteor-autoform.git",
+      "branch": "ui"
+    },
+    "underscore-string-latest": {}
+  }
+}

@@ -1,0 +1,114 @@
+@import "nib"
+
+//Variables
+borderRadius = 4px
+
+//Colors
+white(opacity=1)
+  rgba(255,255,255,opacity)
+
+black(opacity=1)
+  rgba(0,0,0,opacity)
+
+offWhite(opacity=1)
+  rgba(243,243,243,opacity)
+
+offerWhite(opacity=1)
+  rgba(235,235,235,opacity)
+
+gray(opacity=1)
+  rgba(59,54,66,opacity)
+
+offGray(opacity=1)
+  rgba(83,88,95,opacity)
+
+offerGray(opacity=1)
+  rgba(132,139,148,opacity)
+
+midnight(opacity=1)
+  rgba(34,31,38,opacity)
+
+highlight(opacity=1)
+  rgba(74,182,235,opacity)
+
+lowlight(opacity=1)
+  rgba(66,68,88,opacity)
+
+red(opacity=1)
+  rgba(242,116,114,opacity)
+
+green(opacity=1)
+  rgba(118,217,158,opacity)
+
+//Sizings
+minSize(min-width=initial,min-height=initial)
+  if min-width is a 'unit'
+    min-width min-width px
+  else
+    min-width min-width
+
+  if min-height is a 'unit'
+    min-height min-height px
+  else
+    min-height min-height
+
+size(width=auto,height=auto)
+  if width is a 'unit'
+    width width px
+  else
+    width width
+
+  if height is a 'unit'
+    height height px
+  else
+    height height
+
+maxSize(max-width=initial,max-height=initial)
+  if max-width is a 'unit'
+    max-width max-width px
+  else
+    max-width max-width
+
+  if max-height is a 'unit'
+    max-height max-height px
+  else
+    max-height max-height
+
+//Position
+position(position=static,top=auto,right=auto,bottom=auto,left=auto)
+  position position
+
+  if top is auto
+    top auto
+  else
+    top top px
+
+  if right is auto
+    right auto
+  else
+    right right px
+
+  if bottom is auto
+    bottom auto
+  else
+    bottom bottom px
+
+  if left is auto
+    left auto
+  else
+    left left px
+
+//Overflow
+overflow(x=false,y=x)
+  if x
+    overflow-x x
+  if y
+    overflow-y y
+  -webkit-overflow-scrolling touch
+
+futura(size=auto,color=auto)
+  font-family "Futura"
+  text-align center
+  font-size size px
+  text-transform uppercase
+  color color
