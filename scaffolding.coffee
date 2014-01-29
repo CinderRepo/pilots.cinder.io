@@ -1,5 +1,5 @@
-#Router.configure
-#  layoutTemplate: "UI.body"
+Router.configure
+  layoutTemplate: "layout"
 
 Router.map ->
   @route "/",
@@ -19,10 +19,10 @@ Router.map ->
     #  console.log "ROUTER INITIALIZED!"
     #action: ->
     #  console.log "Action :)"
-  @route "/contentProfile",
-    path: "/hello"
-    before: ->
-      console.log "ANOTHER PAGE"
+  #@route "/contentProfile",
+  #  path: "/hello"
+  #  before: ->
+  #    console.log "ANOTHER PAGE"
 
 if Meteor.isClient
   @toggleClickMenu = (e,t) ->

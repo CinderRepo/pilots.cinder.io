@@ -21,8 +21,8 @@
       },
       "jade": {
         "git": "https://github.com/mquandalle/meteor-jade",
-        "tag": "v0.1.0",
-        "commit": "461c800cacc53b2a03dd14bcf950d048bac3f94b"
+        "tag": "v0.1.1",
+        "commit": "2c55c3d4bc36dfc67bd9605c97e5e60003da9693"
       },
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",

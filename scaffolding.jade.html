@@ -2,12 +2,14 @@ head
   title Pilots
 
 body
-  +leftSidebar
-  +main
-  +rightSidebar
-  +clickMenu
+
+template(name="layout")
+  | LAYOUT
+  +yield
+  +yield("leftSidebar")
 
 template(name="leftSidebar")
+  | LEFT SIDEBAR
   .sidebar.left
     a.logo
       .icon
