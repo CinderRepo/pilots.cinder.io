@@ -11,38 +11,52 @@
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui"
       },
-      "underscore-string-latest": {}
+      "underscore-string-latest": {},
+      "collectionFS": {
+        "git": "https://github.com/raix/Meteor-CollectionFS.git",
+        "tag": "v0.3.5"
+      }
     },
     "packages": {
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
         "branch": "cmather",
-        "commit": "d1590b2b2e6096670c3dda8b4724229d7e58a37b"
+        "commit": "030f298074d4c3b0046ede7a3c15d7be6e2f96c1"
       },
       "jade": {
         "git": "https://github.com/mquandalle/meteor-jade",
-        "tag": "v0.1.1",
-        "commit": "2c55c3d4bc36dfc67bd9605c97e5e60003da9693"
+        "tag": "v0.1.2",
+        "commit": "170dcac4033aa3f25175a693283658edcbb345fc"
       },
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui",
-        "commit": "464b635c525d173d0dffaaaa4c91d5457bfd7a65"
+        "commit": "92c535a6c92bd364b8a41b88bc34c490e42a7674"
       },
       "underscore-string-latest": {
         "git": "https://github.com/TimHeckel/meteor-underscore-string.git",
         "tag": "v2.3.3",
         "commit": "4a5d70eee48fbd90a6e6fc78747250d704a0b3bb"
       },
+      "collectionFS": {
+        "git": "https://github.com/raix/Meteor-CollectionFS.git",
+        "tag": "v0.3.5",
+        "commit": "a6fbde6e2df3f081c51cad951305d1e0754d67de"
+      },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",
-        "tag": "v0.2.34",
-        "commit": "d66e63a8e316f978120773ce3f92c7d82fb15f2d"
+        "tag": "v0.2.38",
+        "commit": "2deec0041fc6cb2666df8cd6a51914e499e95683"
       },
       "moment": {
         "git": "https://github.com/acreeger/meteor-moment.git",
         "tag": "v2.5.1",
         "commit": "8c9bc5d3fc96705057737cb9743d555417f6e551"
+      },
+      "cfs-public-folder": {
+        "git": "https://github.com/nooitaf/meteor-cfs-public-folder.git",
+        "tag": "v0.0.2",
+        "commit": "7531bc924a9b9e5ecd568932c7048692330882fb"
       }
     }
   }

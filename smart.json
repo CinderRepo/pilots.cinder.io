@@ -12,6 +12,10 @@
       "git": "https://github.com/aldeed/meteor-autoform.git",
       "branch": "ui"
     },
-    "underscore-string-latest": {}
+    "underscore-string-latest": {},
+    "collectionFS": {
+      "git": "https://github.com/raix/Meteor-CollectionFS.git",
+      "tag": "v0.3.5"
+    }
   }
 }
