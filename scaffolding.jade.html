@@ -4,112 +4,124 @@ head
 body
 
 template(name="layout")
-  | LAYOUT
-  +yield
   +yield("leftSidebar")
+  .content
+    .player
+      video.video(src="stuffed.mp4")
+      .play
+    .toggle.left(data-action="toggleSidebar",data-sidebar="left")
+    .toggle.right(data-action="toggleSidebar",data-sidebar="right")
+    +yield
+  +yield("rightSidebar")
+  +clickMenu
 
 template(name="leftSidebar")
-  | LEFT SIDEBAR
   .sidebar.left
-    a.logo
+    a.logo(href="/")
       .icon
       | Cinder
     .title Browse
     ul.list
       li.item
-        a.link(href="")
+        a.link(href="/")
           .icon
           | Pitches
       li.item
-        a.link(href="")
+        a.link(href="/")
           .icon
           | Trailers
       li.item
-        a.link(href="")
+        a.link(href="/")
           .icon
           | Pilots
       li.item
-        a.link(href="")
+        a.link(href="/")
           .icon
           | Releases
     .title Account
     ul.list
-      li.item
-        a.link(href="")
-          .icon
-          | Login
-      li.item
-        a.link(href="")
-          .icon
-          | Signup
+      if currentUser
+        li.item
+          a.link(href="")
+            .icon
+            | Boop
+        li#signout.item
+          a.link(href="")
+            .icon
+            | Signout
+      else
+        li#login.item
+          a.link(href="")
+            .icon
+            | Login
+        li.item
+          a.link(href="")
+            .icon
+            | Signup
 
 template(name="rightSidebar")
   .sidebar.right
+    .profile
+      with currentUser
+        | #{profile.name}
     .create
     ul.list
       li.item
-        a.link(href="")
+        .link
           .icon
           | Play
       li.item
-        a.link(href="")
+        a.link(href="/about")
           .icon
           | About
       li.item
-        a.link(href="")
+        a.link(href="/community")
           .icon
           | Community
 
-template(name="main")
-  .content
-    .toggle.left(data-action="toggleSidebar",data-sidebar="left")
-    .toggle.right(data-action="toggleSidebar",data-sidebar="right")
-    .title Trailers
-    .tiles
-      a.tile(href="hello")
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
-      .tile
-        .preview
-        .title Life in a Day
-        .subtitle Ridley Scott
+template(name="browse")
+  .title Trailers
+  .tiles
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
+    a.tile(href="about")
+      .preview
+      .title Life in a Day
+      .subtitle Ridley Scott
 
 template(name="clickMenu")
   .clickMenu
@@ -119,24 +131,285 @@ template(name="clickMenu")
     .node.top(data-action="fund")
       .dot
         .inner
+          +coins
     .node.top.right(data-action="filter")
       .dot
         .inner
+
     .node.right(data-action="play")
       .dot
         .inner
-    .node.bottom.right(data-action="createTopic")
+          +play
+    .node.bottom.right(data-action="create")
       .dot
         .inner
+          +add
     .node.bottom(data-action="addMedia")
       .dot
         .inner
+          +media
     .node.bottom.left(data-action="addPoll")
       .dot
         .inner
-    .node.left(data-action="editTopic")
+          +poll
+    .node.left(data-action="edit")
       .dot
         .inner
+          +edit
     .node.top.left(data-action="follow")
       .dot
         .inner
+          +follow
+
+template(name="about")
+  .scroller
+    .about
+      .title Video Game Highschool
+      .author Freddy Wong
+      .description
+        | The about page overlaps the video by default, unless the currently uploaded video is actually playing.
+        | If the currently uplaoded video is actually playing, then the about page will slide down a bit to show
+        | the majority of the video, as well as the actual video controls. The user can gain access to the about
+        | page simply by scrolling back up again, and the about page will overlap the video accordingly.
+        br
+        | The user can view the video again by scrolling back down, and resume play that way, or by clicking "play"
+        | located on the right. The user is able to add text by default, and can place an image or video inline by
+        | clicking and holding down with the mouse button, and choosing the "add media" button. Alternatively, text
+        | can be either styled via a hotkey, or be made to be a header. Media can be relocated by dragging and dropping.
+
+template(name="community")
+  .community
+    .currentTopic
+      .section Video Game Highschool
+      .topic
+        .title What's your favorite part?
+        .avatar
+        .author Andrew Guardamano
+        .description
+          | The community feature will be an important
+          | part of the platform, and will allow users to
+          | post threads for discussion, place rich media inline,
+          | and put money towards projects at any time, as well as make use of
+          | polls and other useful features.
+      .topic
+        .avatar
+        .author Pieter Parker
+        .description
+          | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+          | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+          | Nullam eget congue odio. Nullam quis gravida magna.
+          | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+          | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+          | mi, vel aliquet diam laoreet id.
+        .topic
+          .avatar
+          .author Peter Baden
+          .description
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+            | Nullam eget congue odio. Nullam quis gravida magna.
+            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+            | mi, vel aliquet diam laoreet id.
+          .topic
+            .avatar
+            .author Andrew Guardamano
+            .description
+              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+              | Nullam eget congue odio. Nullam quis gravida magna.
+              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+              | mi, vel aliquet diam laoreet id.
+        .topic
+          .avatar
+          .author Pieter Parker
+          .description
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+            | Nullam eget congue odio. Nullam quis gravida magna.
+            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+            | mi, vel aliquet diam laoreet id.
+          .topic
+            .avatar
+            .author Peter Baden
+            .description
+              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+              | Nullam eget congue odio. Nullam quis gravida magna.
+              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+              | mi, vel aliquet diam laoreet id.
+            .topic
+              .avatar
+              .author Andrew Guardamano
+              .description
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                | Nullam eget congue odio. Nullam quis gravida magna.
+                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                | mi, vel aliquet diam laoreet id.
+        .topic
+          .avatar
+          .author Pieter Parker
+          .description
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+            | Nullam eget congue odio. Nullam quis gravida magna.
+            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+            | mi, vel aliquet diam laoreet id.
+          .topic
+            .avatar
+            .author Peter Baden
+            .description
+              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+              | Nullam eget congue odio. Nullam quis gravida magna.
+              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+              | mi, vel aliquet diam laoreet id.
+            .topic
+              .avatar
+              .author Andrew Guardamano
+              .description
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                | Nullam eget congue odio. Nullam quis gravida magna.
+                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                | mi, vel aliquet diam laoreet id.
+            .topic
+              .avatar
+              .author Peter Baden
+              .description
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                | Nullam eget congue odio. Nullam quis gravida magna.
+                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                | mi, vel aliquet diam laoreet id.
+              .topic
+                .avatar
+                .author Andrew Guardamano
+                .description
+                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                  | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                  | Nullam eget congue odio. Nullam quis gravida magna.
+                  | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                  | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                  | mi, vel aliquet diam laoreet id.
+                .topic
+                  .avatar
+                  .author Peter Baden
+                  .description
+                    | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                    | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                    | Nullam eget congue odio. Nullam quis gravida magna.
+                    | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                    | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                    | mi, vel aliquet diam laoreet id.
+                  .topic
+                    .avatar
+                    .author Andrew Guardamano
+                    .description
+                      | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                      | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                      | Nullam eget congue odio. Nullam quis gravida magna.
+                      | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                      | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                      | mi, vel aliquet diam laoreet id.
+                    .topic
+                      .avatar
+                      .author Peter Baden
+                      .description
+                        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                        | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                        | Nullam eget congue odio. Nullam quis gravida magna.
+                        | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                        | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                        | mi, vel aliquet diam laoreet id.
+                      .topic
+                        .avatar
+                        .author Andrew Guardamano
+                        .description
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                          | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                          | Nullam eget congue odio. Nullam quis gravida magna.
+                          | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                          | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                          | mi, vel aliquet diam laoreet id.
+
+
+    .topics
+      .topic
+        .title What’s your favorite part?
+        .avatar
+        .author Andrew Guardamano
+        .description
+          | The Community feature will be an important
+          | part of the platform, and will allow users to
+          | post threads for discussion, place rich media..
+      .topic
+        .title What’s your favorite part?
+        .avatar
+        .author Andrew Guardamano
+        .description
+          | The Community feature will be an important
+          | part of the platform, and will allow users to
+          | post threads for discussion, place rich media..
+      .topic
+        .title What’s your favorite part?
+        .avatar
+        .author Andrew Guardamano
+        .description
+          | The Community feature will be an important
+          | part of the platform, and will allow users to
+          | post threads for discussion, place rich media..
+
+
+//-Icons
+template(name="coins")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M46.935,19.523c0,4.593-10.506,8.315-23.469,8.315C10.509,27.838,0,24.116,0,19.523c0-4.595,10.508-8.316,23.465-8.316C36.429,11.208,46.935,14.929,46.935,19.523")
+    path.iconFill(d="M46.935,25.406c0,4.593-10.506,8.317-23.469,8.317C10.509,33.723,0,29.999,0,25.406v8.696c0,4.593,10.508,8.317,23.465,8.317c12.963,0,23.469-3.724,23.469-8.317V25.406z")
+    path.iconFill(d="M46.935,40.791c0,4.592-10.506,8.315-23.469,8.315C10.509,49.106,0,45.382,0,40.791v8.696c0,4.592,10.508,8.314,23.465,8.314c12.963,0,23.469-3.723,23.469-8.314V40.791z")
+    path.iconFill(d="M46.935,55.951c0,4.593-10.506,8.316-23.469,8.316C10.509,64.268,0,60.544,0,55.951v8.696c0,4.594,10.508,8.316,23.465,8.316c12.963,0,23.469-3.723,23.469-8.316V55.951z")
+    path.iconFill(d="M46.935,71.56c0,4.594-10.506,8.315-23.469,8.315C10.509,79.875,0,76.153,0,71.56v8.695c0,4.593,10.508,8.315,23.465,8.315c12.963,0,23.469-3.723,23.469-8.315V71.56z")
+    path.iconFill(d="M100,50.513c0,4.596-10.507,8.319-23.469,8.319c-12.956,0-23.465-3.724-23.465-8.319c0-4.59,10.509-8.314,23.465-8.314C89.493,42.199,100,45.921,100,50.513")
+    path.iconFill(d="M100,56.398c0,4.591-10.507,8.314-23.469,8.314c-12.956,0-23.465-3.724-23.465-8.314v8.695c0,4.592,10.509,8.314,23.465,8.314c12.962,0,23.469-3.723,23.469-8.314V56.398z")
+    path.iconFill(d="M100,71.781c0,4.595-10.507,8.315-23.469,8.315c-12.956,0-23.465-3.721-23.465-8.315v8.695c0,4.595,10.509,8.315,23.465,8.315c12.962,0,23.469-3.721,23.469-8.315V71.781z")
+
+template(name="play")
+  svg.icon(viewBox="0 0 100 100")
+    polygon.iconFill(points="22.02,14.02 93.98,50.004 22.02,85.98")
+
+template(name="add")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M91.111,42.222H57.777V8.889C57.777,4,54.277,0,50,0c-4.278,0-7.778,4-7.778,8.889v33.333H8.889C4,42.222,0,45.722,0,50c0,4.277,4,7.777,8.889,7.777h33.333v33.334C42.222,96,45.722,100,50,100c4.277,0,7.777-4,7.777-8.889V57.777h33.334C96,57.777,100,54.277,100,50C100,45.722,96,42.222,91.111,42.222z")
+
+template(name="media")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M0,16.25v67.5c0,6.299,1.275,7.5,7.5,7.5h85c6.174,0,7.5-1.15,7.5-7.5v-67.5c0-6.15-1.177-7.5-7.5-7.5h-85C1.299,8.75,0,9.824,0,16.25z M88.225,73.75H11.826c8.35-12.176,23.199-32.475,26.973-32.475c3.652,0,16.05,16.401,21.65,22.174c0,0,7.202-9.623,10.977-9.623C75.273,53.826,88.101,73.65,88.225,73.75z M65.776,31.25c0-5.1,4.124-9.224,9.224-9.224s9.224,4.124,9.224,9.224S80.1,40.474,75,40.474S65.776,36.35,65.776,31.25z")
+
+template(name="poll")
+  svg.icon(viewBox="0 0 100 100")
+    rect.iconFill(x="26",y="17",width="74",height="16")
+    rect.iconFill(x="26",y="44",width="53",height="16")
+    rect.iconFill(x="26",y="70",width="26",height="16")
+    circle.iconFill(cx="8.438",cy="24.98",r="7.896")
+    circle.iconFill(cx="8.438",cy="52.093",r="7.896")
+    circle.iconFill(cx="8.438",cy="77.645",r="7.896")
+
+template(name="edit")
+  svg.icon(viewBox="0 0 100 100")
+    polygon.iconFill(points="15.081,64.076 37.24,85.402 79.92,41.819 57.762,20.5")
+    polygon.iconFill(points="31.516,91.254 9.356,69.928 0,100")
+    path.iconFill(d="M0,100")
+    polygon.iconFill(points="77.841,0 63.5,14.641 85.658,35.966 100,21.319")
+
+template(name="follow")
+  svg.icon(viewBox="0 0 100 100")
+    polygon.iconFill(points="50,2.449 65.454,33.754 100,38.775 75.002,63.142 80.904,97.552 50,81.307 19.101,97.552 25.002,63.142 0,38.775 34.551,33.754")
