@@ -10,6 +10,7 @@ coffeescript
 stylus
 iron-router
 blaze-layout
+accounts-facebook
 #iron-router-progress
 underscore-string-latest
 #spin
