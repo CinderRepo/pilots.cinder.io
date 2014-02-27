@@ -4,24 +4,29 @@
     "basePackages": {
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "cmather"
+        "branch": "blaze-integration"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "branch": "devel"
       },
       "jade": {},
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui"
       },
-      "underscore-string-latest": {},
-      "collectionFS": {
-        "git": "https://github.com/raix/Meteor-CollectionFS.git",
-        "tag": "v0.3.5"
-      }
+      "underscore-string-latest": {}
     },
     "packages": {
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "cmather",
-        "commit": "030f298074d4c3b0046ede7a3c15d7be6e2f96c1"
+        "branch": "blaze-integration",
+        "commit": "3a26902a3a0b4b3b28667727d407344ddc2fa803"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "branch": "devel",
+        "commit": "91f3948edac11c28328630c6a7ab769d34fb35a0"
       },
       "jade": {
         "git": "https://github.com/mquandalle/meteor-jade",
@@ -38,11 +43,6 @@
         "tag": "v2.3.3",
         "commit": "4a5d70eee48fbd90a6e6fc78747250d704a0b3bb"
       },
-      "collectionFS": {
-        "git": "https://github.com/raix/Meteor-CollectionFS.git",
-        "tag": "v0.3.5",
-        "commit": "a6fbde6e2df3f081c51cad951305d1e0754d67de"
-      },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",
         "tag": "v0.2.38",
@@ -52,11 +52,6 @@
         "git": "https://github.com/acreeger/meteor-moment.git",
         "tag": "v2.5.1",
         "commit": "8c9bc5d3fc96705057737cb9743d555417f6e551"
-      },
-      "cfs-public-folder": {
-        "git": "https://github.com/nooitaf/meteor-cfs-public-folder.git",
-        "tag": "v0.0.2",
-        "commit": "7531bc924a9b9e5ecd568932c7048692330882fb"
       }
     }
   }

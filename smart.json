@@ -5,17 +5,17 @@
   "packages": {
     "iron-router": {
       "git": "https://github.com/EventedMind/iron-router.git",
-      "branch": "cmather"
+      "branch": "blaze-integration"
+    },
+    "blaze-layout": {
+      "git": "https://github.com/EventedMind/blaze-layout.git",
+      "branch": "devel"
     },
     "jade": {},
     "autoform": {
       "git": "https://github.com/aldeed/meteor-autoform.git",
       "branch": "ui"
     },
-    "underscore-string-latest": {},
-    "collectionFS": {
-      "git": "https://github.com/raix/Meteor-CollectionFS.git",
-      "tag": "v0.3.5"
-    }
+    "underscore-string-latest": {}
   }
 }

@@ -4,14 +4,13 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-autopublish
-insecure
 preserve-inputs
 jade
 coffeescript
 stylus
 iron-router
+blaze-layout
 #iron-router-progress
 underscore-string-latest
 #spin
-collectionFS
+#collectionFS

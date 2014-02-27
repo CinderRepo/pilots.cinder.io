@@ -5,6 +5,10 @@ body
   width 100%
   height 100%
   user-select none
+  avenir()
+*
+  -webkit-user-drag none
+  box-sizing border-box
 
 .sidebar
   position fixed
@@ -77,59 +81,221 @@ body
   right 170px
   bottom 0
   left 170px
-  overflow-y auto
-  overflow-x hidden
+  overflow hidden
+  height 100%
   //margin-right 170px
   //margin-left 170px
   //height 10000px
+  .title
+    //text-align center
+    padding 0 40px 0 40px
+    line-height 1.5
+    futura()
+    font-size 24px
+    color offGray()
+  .tiles
+    width 940px
+    height 2000px
+    margin 0 auto
+    padding-right 5px
+    padding-left 5px
+  .tile
+    width 300px
+    height 210px
+    float left
+    margin-top 10px
+    margin-right 5px
+    margin-left 5px
+    cursor pointer
+    .preview
+      width 300px
+      height 169px
+      background midnight()
+      border-radius 4px
+    .title
+      font-size 14px
+      padding 0
+      line-height 20px
+      text-align left
+    .subtitle
+      font-size 12px
+      futura()
+      text-align left
+      line-height 14px
+      color offerGray()
 .toggle
   size(16,16)
   border-radius 16px
   position absolute
   top 17px
+  z-index 3
   background midnight()
   cursor pointer
   &.left
     left 10px
   &.right
     right 10px
-.title
-  //text-align center
-  padding 0 40px 0 40px
-  line-height 50px
-  futura()
-  font-size 24px
-  color offGray()
-.tiles
-  width 940px
-  height 2000px
-  margin 0 auto
-  padding-right 5px
-  padding-left 5px
-.tile
-  width 300px
-  height 210px
-  float left
-  margin-top 10px
-  margin-right 5px
-  margin-left 5px
+.scroller
+  position absolute
+  top 0
+  bottom 0
+  width 100%
+  overflow-x hidden
+  overflow-y auto
+
+.player
+  position relative
+.video
+  width 100%
+  background black
+  z-index 2
+.play
+  size(120,120)
+  border-radius 120px
+  background white()
+  position absolute
+  top 50%
+  right 0
+  left 0
+  z-index 1
+  margin -60px auto 0 auto
   cursor pointer
-  .preview
-    width 300px
-    height 169px
-    background midnight()
-    border-radius 4px
+.about
+  border-top 1px solid offWhite()
+  background white()
+  width 100%
+  height 10000px
+  position relative
+  margin-top 50%
+  z-index 2
+  transition margin-top 300ms ease-in-out
+  padding-top 20px
+  padding-right 40px
+  padding-bottom 20px
+  padding-left 40px
+  color midnight(0.8)
   .title
-    font-size 14px
-    padding 0
-    line-height 20px
     text-align left
-  .subtitle
-    font-size 12px
+    padding 0
+  .author
+    futura()
+    font-size 14px
+    text-transform uppercase
+    text-align left
+    color midnight(0.40)
+  .description
+    padding-top 10px
+    font-size 16px
+    color midnight(0.80)
+
+//Community
+.community
+  background white()
+  width 100%
+  position absolute
+  top 0
+  bottom 0
+  z-index 2
+  .section
     futura()
     text-align left
-    line-height 14px
-    color offerGray()
+    color midnight(0.25)
+    padding-right 20px
+    padding-left 40px
+    position relative
+    top 15px
+.currentTopic
+  height 100%
+  width 70%
+  overflow-x hidden
+  overflow-y auto
+  float left
+  padding-bottom 40px
+  .topic
+    padding-top 20px
+    padding-right 20px
+    //padding-bottom 20px
+    padding-left 40px
+    //border-bottom 1px solid offWhite()
+    color midnight(0.80)
+    position relative
+    &:last-child
+      border-bottom 0
+    &:last-of-type
+      //padding-bottom 20px
+    .avatar
+      background midnight(0.85)
+      size(40,40)
+      border-radius 40px
+      position absolute
+      margin-top 10px
+    .title
+      text-align left
+      text-transform none
+      padding-right 10px
+      padding-left 0
+      color midnight(0.85)
+    .author
+      futura()
+      font-size 12px
+      text-align left
+      color midnight(0.40)
+      margin-bottom 5px
+      padding-left 50px
+      line-height 1.5
+      margin-top 10px
+    .description
+      padding-left 50px
+      font-size 16px
+.topics
+  height 100%
+  width 30%
+  overflow-x hidden
+  overflow-y auto
+  float left
+  border-left 1px solid offWhite()
+  padding 20px
+  position relative
+  z-index 1
+  .topic
+    width 100%
+    height auto
+    cursor pointer
+    margin-bottom 30px
+    position relative
+    &:hover
+      .title
+        color midnight(0.85)
+      .avatar
+        background midnight(0.85)
+      .author
+        color midnight(0.4)
+      .description
+        color midnight(0.95)
+    .title
+      font-size 16px
+      color midnight(0.4)
+      text-transform none
+      text-align left
+      padding 0
+      line-height 1.5
+      margin-bottom 10px
+    .avatar
+      size(40,40)
+      border-radius 40px
+      background midnight(0.4)
+      position absolute
+    .author
+      futura()
+      font-size 10px
+      text-align left
+      text-transform uppercase
+      color midnight(0.25)
+      padding-left 50px
+      margin-bottom 5px
+    .description
+      padding-left 50px
+      color midnight(0.5)
 
 //Tiles Media Queries -> Both Sidebars Open
 //One Column
@@ -193,6 +359,7 @@ body
 //Click Menu
 .clickMenu
   position absolute
+  pointer-events none
   .node
     size(40,40)
     position absolute
@@ -207,17 +374,28 @@ body
     transition opacity 100ms ease-out, transform 100ms ease-out
     opacity 0
     transform translate3d(0,0,0)
-    //pointer-events none
     cursor pointer
     &.origin
       transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
+      pointer-events none
       .dot
         transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
+        .inner
+          size(40,40)
+          border-radius 40px
+          background midnight(0.9)
+          position absolute
+          top 50%
+          left 50%
+          margin -20px auto auto -20px
+          transition transform 400ms ease-out
+          transform-origin 50% 50%
+          transform scale3d(0.2,0.2,0.2)
     .dot
       size(40,40)
       border-radius 40px
-      border 2px solid midnight()
-      background transparent
+      border 2px solid midnight(0.85)
+      background white(0.9)
       position absolute
       top 0
       right 0
@@ -226,17 +404,20 @@ body
       transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
       transform scale3d(0,0,0)
       .inner
-        size(40,40)
+        size(32,32)
+        margin 2px
+        background midnight(0.9)
+        //futura()
+        //line-height 38px
+        //font-size 24px
         border-radius 40px
-        background midnight()
+        //color midnight(0.8)
         position absolute
-        top 50%
-        left 50%
-        margin -20px auto auto -20px
-        transition transform 400ms ease-out
-        transform-origin 50% 50%
-        transform scale3d(0.2,0.2,0.2)
+        .icon
+          padding 8px
   &.activated
+    pointer-events auto
+    cursor pointer
     .node
       opacity 1
       transition opacity 100ms ease-out 400ms, transform 100ms ease-out 400ms
@@ -277,3 +458,13 @@ body
       .dot
         transition transform 100ms ease-out
         transform scale3d(1,1,1)
+
+//Icons
+.icon
+  position absolute
+  top 0
+  right 0
+  width 100%
+  height 100%
+  .iconFill
+    fill white()
