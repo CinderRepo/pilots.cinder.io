@@ -1,181 +1,117 @@
 head
   title Pilots
+  meta(name="apple-mobile-web-app-capable",content="yes")
+  meta(name="apple-mobile-web-app-status-bar-style",content="black-translucent")
+  meta(name="viewport",content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no")
 
 body
 
 template(name="layout")
-  +yield(region="leftSidebar")
-  .content
-    .player
-      video.video(src="stuffed.mp4")
-      .play
-    .toggle.left(data-action="toggleSidebar",data-sidebar="left")
-    .toggle.right(data-action="toggleSidebar",data-sidebar="right")
-    +yield
-  +yield(region="rightSidebar")
+  //-+yield(region="leftSidebar")
+  //-.content
+  .player
+    //-video.video(src="stuffed.mp4")
+    .play
+  //-.toggle.left(data-action="toggleSidebar",data-sidebar="left")
+  //-.toggle.right(data-action="toggleSidebar",data-sidebar="right")
+  .firstPane
+    .secondPane
+      .thirdPane
+        +yield
+  //-+yield(region="rightSidebar")
   +clickMenu
 
-template(name="leftSidebar")
-  .sidebar.left
-    a.logo(href="/")
-      .icon
-      | Cinder
-    .title Browse
-    ul.list
-      li.item
-        a.link(href="/")
-          .icon
-          | Pitches
-      li.item
-        a.link(href="/")
-          .icon
-          | Trailers
-      li.item
-        a.link(href="/")
-          .icon
-          | Pilots
-      li.item
-        a.link(href="/")
-          .icon
-          | Releases
-    .title Account
-    ul.list
-      if currentUser
-        li.item
-          a.link(href="")
-            .icon
-            | Boop
-        li#signout.item
-          a.link(href="")
-            .icon
-            | Signout
-      else
-        li#login.item
-          a.link(href="")
-            .icon
-            | Login
-        li.item
-          a.link(href="")
-            .icon
-            | Signup
-
-template(name="rightSidebar")
-  .sidebar.right
-    .profile
-      with currentUser
-        | #{profile.name}
-    .create
-    ul.list
-      li.item
-        .link
-          .icon
-          | Play
-      li.item
-        a.link(href="/about")
-          .icon
-          | About
-      li.item
-        a.link(href="/community")
-          .icon
-          | Community
-
-template(name="browse")
-  .title Trailers
-  .tiles
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
-    a.tile(href="about")
-      .preview
-      .title Life in a Day
-      .subtitle Ridley Scott
 
 template(name="clickMenu")
   .clickMenu
     .node.origin
       .dot
         .inner
-    .node.top(data-action="fund")
-      .dot
-        .inner
-          +coins
-    .node.top.right(data-action="filter")
-      .dot
-        .inner
+    if menuIs "view"
+      .node.top(data-action="fund")
+        .dot
+          .inner
+            .iconWrapper
+              +coins
+            .title Fund
+      .node.top.right(data-action="browse")
+        .dot
+          .inner
+            .iconWrapper
+              +projects
+            .title Browse
+      .node.right(data-action="about")
+        .dot
+          .inner
+            .iconWrapper
+              +about
+    else
+      .node.right(data-action="play")
+        .dot
+          .inner
+            .iconWrapper
+              +play
+            .title Play
+      .node.bottom.right(data-action="create")
+        .dot
+          .inner
+            .iconWrapper
+              +add
+            .title Create
+      .node.bottom(data-action="addMedia")
+        .dot
+          .inner
+            .iconWrapper
+              +media
+            .title Add Media
+      .node.bottom.left(data-action="addPoll")
+        .dot
+          .inner
+            .iconWrapper
+              +poll
+            .title Add Poll
+      .node.left(data-action="edit")
+        .dot
+          .inner
+            .iconWrapper
+              +edit
+            .title Edit
+      .node.top.left(data-action="follow")
+        .dot
+          .inner
+            .iconWrapper
+              +follow
+            .title Follow
 
-    .node.right(data-action="play")
-      .dot
-        .inner
-          +play
-    .node.bottom.right(data-action="create")
-      .dot
-        .inner
-          +add
-    .node.bottom(data-action="addMedia")
-      .dot
-        .inner
-          +media
-    .node.bottom.left(data-action="addPoll")
-      .dot
-        .inner
-          +poll
-    .node.left(data-action="edit")
-      .dot
-        .inner
-          +edit
-    .node.top.left(data-action="follow")
-      .dot
-        .inner
-          +follow
+template(name="browse")
+  //-.scroller
+  .browse
+    .title.clickable(data-state=focused) Trailers
+    .tiles
+      each projects
+        +tile
+
+template(name="tile")
+  .tile.clickable(href="about",data-menu="view",data-state=focused)
+    .preview
+    .title= title
+    .subtitle= owner
 
 template(name="about")
-  .scroller
-    .about
-      .title Video Game Highschool
-      .author Freddy Wong
-      .description
-        | The about page overlaps the video by default, unless the currently uploaded video is actually playing.
-        | If the currently uplaoded video is actually playing, then the about page will slide down a bit to show
-        | the majority of the video, as well as the actual video controls. The user can gain access to the about
-        | page simply by scrolling back up again, and the about page will overlap the video accordingly.
-        br
-        | The user can view the video again by scrolling back down, and resume play that way, or by clicking "play"
-        | located on the right. The user is able to add text by default, and can place an image or video inline by
-        | clicking and holding down with the mouse button, and choosing the "add media" button. Alternatively, text
-        | can be either styled via a hotkey, or be made to be a header. Media can be relocated by dragging and dropping.
+  //-.scroller
+  .about
+    .title Video Game Highschool
+    .author Freddy Wong
+    .description
+      | The about page overlaps the video by default, unless the currently uploaded video is actually playing.
+      | If the currently uplaoded video is actually playing, then the about page will slide down a bit to show
+      | the majority of the video, as well as the actual video controls. The user can gain access to the about
+      | page simply by scrolling back up again, and the about page will overlap the video accordingly.
+      br
+      | The user can view the video again by scrolling back down, and resume play that way, or by clicking "play"
+      | located on the right. The user is able to add text by default, and can place an image or video inline by
+      | clicking and holding down with the mouse button, and choosing the "add media" button. Alternatively, text
+      | can be either styled via a hotkey, or be made to be a header. Media can be relocated by dragging and dropping.
 
 template(name="community")
   .community
@@ -413,3 +349,15 @@ template(name="edit")
 template(name="follow")
   svg.icon(viewBox="0 0 100 100")
     polygon.iconFill(points="50,2.449 65.454,33.754 100,38.775 75.002,63.142 80.904,97.552 50,81.307 19.101,97.552 25.002,63.142 0,38.775 34.551,33.754")
+
+template(name="login")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="projects")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="aboutIcon")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="communityIcon")
+  svg.icon(viewBox="0 0 100 100")

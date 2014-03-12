@@ -16,6 +16,8 @@
       "git": "https://github.com/aldeed/meteor-autoform.git",
       "branch": "ui"
     },
-    "underscore-string-latest": {}
+    "underscore-string-latest": {},
+    "fastclick": {},
+    "jquery.transit": {}
   }
 }

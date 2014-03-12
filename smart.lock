@@ -15,38 +15,55 @@
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui"
       },
-      "underscore-string-latest": {}
+      "underscore-string-latest": {},
+      "fastclick": {},
+      "jquery.transit": {}
     },
     "packages": {
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
         "branch": "blaze-integration",
-        "commit": "3a26902a3a0b4b3b28667727d407344ddc2fa803"
+        "commit": "f8ffd44bceacc6a55f4ebcc218c072f5a18138b4"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "branch": "devel",
-        "commit": "91f3948edac11c28328630c6a7ab769d34fb35a0"
+        "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
       },
       "jade": {
-        "git": "https://github.com/mquandalle/meteor-jade",
-        "tag": "v0.1.2",
-        "commit": "170dcac4033aa3f25175a693283658edcbb345fc"
+        "git": "https://github.com/mquandalle/meteor-jade.git",
+        "tag": "v0.1.3",
+        "commit": "afed3e88885b202416e7aaae7650197b9fdcf073"
       },
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui",
-        "commit": "92c535a6c92bd364b8a41b88bc34c490e42a7674"
+        "commit": "5483eac9959a59533ad08bf0e102fadad4f0f731"
       },
       "underscore-string-latest": {
         "git": "https://github.com/TimHeckel/meteor-underscore-string.git",
         "tag": "v2.3.3",
         "commit": "4a5d70eee48fbd90a6e6fc78747250d704a0b3bb"
       },
+      "fastclick": {
+        "git": "https://github.com/percolatestudio/meteor-fastclick",
+        "tag": "v0.6.7",
+        "commit": "fcb3bfd34d9f6874e626b4e24e8f54107938db41"
+      },
+      "jquery.transit": {
+        "git": "https://github.com/noorderstorm/meteor-jquery-transit.git",
+        "tag": "v0.1.0",
+        "commit": "d3b8a4149ab40b14b125edd473c3850177895fb5"
+      },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",
-        "tag": "v0.2.38",
-        "commit": "2deec0041fc6cb2666df8cd6a51914e499e95683"
+        "tag": "v0.2.40",
+        "commit": "d22892daa943e3567916effeaafd794ca6af5cd2"
+      },
+      "collection2": {
+        "git": "https://github.com/aldeed/meteor-collection2.git",
+        "tag": "v0.3.8",
+        "commit": "69aff2a21ba3c382f915e1f9dbcca2ad38edb6d5"
       },
       "moment": {
         "git": "https://github.com/acreeger/meteor-moment.git",
