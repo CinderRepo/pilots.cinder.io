@@ -278,15 +278,15 @@ template(name="cover")
             = serverError
           +autoForm class="coverForm" id="signupForm" schema=Schema.signupFormSchema
             .coverFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='username'}}error{{/if}}")
-              +afFieldInput class="coverFormInput" name="username" type="text" placeholder="Username" autocomplete="off"
+              +afFieldInput class="coverFormInput" name="username" type="text" placeholder="Username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
               .coverFormMessage(data-state="{{#if afFieldIsInvalid name='username'}}active{{/if}}")
                 {{{afFieldMessage name="username"}}}
             .coverFormInputWrapper.second(data-state="{{#if afFieldIsInvalid name='email'}}error{{/if}}")
-              +afFieldInput class="coverFormInput" name="email" type="email" placeholder="email@email.com" autocomplete="off"
+              +afFieldInput class="coverFormInput" name="email" type="email" placeholder="email@email.com" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
               .coverFormMessage(data-state="{{#if afFieldIsInvalid name='email'}}active{{/if}}")
                 {{{afFieldMessage name="email"}}}
             .coverFormInputWrapper.third(data-state="{{#if afFieldIsInvalid name='password'}}error{{/if}}")
-              +afFieldInput class="coverFormInput" name="password" type="password" placeholder="Password" autocomplete="off"
+              +afFieldInput class="coverFormInput" name="password" type="password" placeholder="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
               .coverFormMessage(data-state="{{#if afFieldIsInvalid name='password'}}active{{/if}}")
                 {{{afFieldMessage name="password"}}}
             button.coverFormSubmit(type="submit")
@@ -297,11 +297,11 @@ template(name="cover")
             = serverError
           +autoForm class="coverForm" id="loginForm" schema=Schema.loginFormSchema
             .coverFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='usernameOrEmail'}}error{{/if}}")
-              +afFieldInput class="coverFormInput" name="usernameOrEmail" type="text" placeholder="Username Or Email" autocomplete="off"
+              +afFieldInput class="coverFormInput" name="usernameOrEmail" type="text" placeholder="Username Or Email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
               .coverFormMessage(data-state="{{#if afFieldIsInvalid name='usernameOrEmail'}}active{{/if}}")
                 {{{afFieldMessage name="usernameOrEmail"}}}
             .coverFormInputWrapper.second(data-state="{{#if afFieldIsInvalid name='password'}}error{{/if}}")
-              +afFieldInput class="coverFormInput" name="password" type="password" placeholder="Password" autocomplete="off"
+              +afFieldInput class="coverFormInput" name="password" type="password" placeholder="Password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
               .coverFormMessage(data-state="{{#if afFieldIsInvalid name='password'}}active{{/if}}")
                 {{{afFieldMessage name="password"}}}
             button.coverFormSubmit(type="submit")
@@ -327,7 +327,7 @@ template(name="contentAbout")
       with currentContent
         .title.clickable(data-menu="edit",data-property="title",data-state="{{focused 'title'}}")= title
         .author(data-state=focused)= owner
-        .description.clickable(data-menu="edit",data-property="content",data-state="{{focused 'content'}}")= content
+        .description.clickable(data-menu="edit",data-property="body",data-state="{{focused 'body'}}")= body
     .pane
       | Image
 
@@ -532,7 +532,7 @@ template(name="profileAbout")
         .pane.clickable(data-menu="edit",data-state=focused)
           .title= title
           .author= subtitle
-          .description= content
+          .description= body
       //-.pane
         .title.clickable(data-menu="edit",data-property="username",data-state="{{focused 'username'}}")
           .innerText(data-state="{{editing 'username'}}")= username
@@ -585,7 +585,7 @@ template(name="topic")
     .author= subtitle
     .description.editor.clickable(data-menu="topic")
       //-= content
-      {{{content}}}
+      {{{body}}}
       //-= content
       //-+editor
   each topicComments

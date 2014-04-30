@@ -424,7 +424,7 @@ if Meteor.isClient
       #console.log "this",this
       self = this
       currentTarget = $(e.currentTarget)
-      console.log "currentTarget",currentTarget
+      #console.log "currentTarget",currentTarget
       html = currentTarget.html()
       #console.log "html",html
       #Check for if it's a topic or a comment, and update accordingly.
@@ -434,7 +434,22 @@ if Meteor.isClient
           self._id
         ,
           $set:
-            content: html
+            body: html
+        ,
+          (err,result) ->
+            if err
+              console.log "err",err
+            else
+              console.log "result",result
+        )
+      else
+        #It's a top level topic, update the topic.
+        console.log "Top Level!"
+        Topics.update(
+          self._id
+        ,
+          $set:
+            body: html
         ,
           (err,result) ->
             if err
@@ -658,7 +673,7 @@ if Meteor.isClient
           user = Meteor.user()
           Projects.insert
             title: "My Film"
-            content: "My First Film Content!"
+            body: "My First Film Content!"
             owner: Meteor.userId()
             published: false
           , (err, result) ->
@@ -998,14 +1013,14 @@ if Meteor.isServer
     user.profile.panes = []
     info = {}
     info.subtitle = "Newbie"
-    info.content = "Learning the tricks of the trade!"
+    info.body = "Learning the tricks of the trade!"
     user.profile.panes.push info
     user.profile.community = {}
     #user.profile.community.topics = []
     Topics.insert
       title: "What are you making next?"
       subtitle: user.username
-      content: "What would you like to see next?"
+      body: "What would you like to see next?"
       owner: user._id
     , (err, result) ->
       console.log "Insert callback!"
