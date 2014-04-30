@@ -4,16 +4,19 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-preserve-inputs
 jade
 coffeescript
 stylus
 iron-router
-blaze-layout
-accounts-facebook
-#iron-router-progress
 underscore-string-latest
-#spin
-#collectionFS
+collectionFS
+cfs-gridfs
+stripe
+accounts-base
+accounts-password
 fastclick
-jquery.transit
+autoform
+simple-schema
+collection-helpers
+#medium-editor-updated
+medium-editor-updated

@@ -1,8 +1,8 @@
 head
   title Pilots
   meta(name="apple-mobile-web-app-capable",content="yes")
-  meta(name="apple-mobile-web-app-status-bar-style",content="black-translucent")
-  meta(name="viewport",content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no")
+  meta(name="apple-mobile-web-app-status-bar-style",content="black")
+  meta(name="viewport",content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui")
 
 body
 
@@ -10,14 +10,24 @@ template(name="layout")
   //-+yield(region="leftSidebar")
   //-.content
   .player
-    //-video.video(src="stuffed.mp4")
-    .play
+    .logo
+      +pilotsIcon
+    if routeIsContent
+      with currentContent
+        video.video.clickable(src=videoSrc)
+        if contentIs "delmer.mp4"
+          .banner.contentCover(style=previewSrc)
+    if routeIsProfile
+      .videoWrapper
+        video.video.clickable(src="jesse.mp4")
+        .banner.profileCover(style="background-image:url('jesse.png');")
   //-.toggle.left(data-action="toggleSidebar",data-sidebar="left")
   //-.toggle.right(data-action="toggleSidebar",data-sidebar="right")
   .firstPane
     .secondPane
       .thirdPane
         +yield
+  +cover
   //-+yield(region="rightSidebar")
   +clickMenu
 
@@ -26,150 +36,320 @@ template(name="clickMenu")
   .clickMenu
     .node.origin
       .dot
-        .inner
-    if menuIs "view"
-      .node.top(data-action="fund")
+        .dotInner
+    .node.outer.top.left(data-action="account")
+      .dot
+        .dotInner
+          .iconWrapper
+            +accountIcon
+          .title Account
+        unless currentUser
+          if coverStateIsnt "signup"
+            .node.inner.top.first(data-action="signup")
+              .dot
+                .dotInner
+                  .iconWrapper
+                    +profileIcon
+                  .title Signup
+          if coverStateIsnt "login"
+            .node.inner.top.second(data-action="login")
+              .dot
+                .dotInner
+                  .iconWrapper
+                    +profileIcon
+                  .title Login
+        else
+          .node.inner.top.first(data-action="profileAbout")
+            .dot
+              .dotInner
+                .iconWrapper
+                  +profileIcon
+                .title Profile
+          .node.inner.top.second(data-action="logout")
+            .dot
+              .dotInner
+                .iconWrapper
+                  +profileIcon
+                .title Logout
+    //-.node.outer.top(data-action="account")
+      .dot
+        .dotInner
+          .iconWrapper
+            +playIcon
+          .title Account
+        .node.top.left(data-action="profile")
+          .dot
+            .dotInner
+              .iconWrapper
+                +profileIcon
+              .title Profile
+        .node.inner.top(data-action="login")
+          .dot
+            .dotInner
+              .iconWrapper
+                +playIcon
+              .title Login
+    //-.node.outer.left(data-action="browse")
+      .dot
+        .dotInner
+          .iconWrapper
+            +playIcon
+          .title Browse
+        //-.node.inner.top(data-action="pitches")
+          .dot
+            .dotInner
+              .iconWrapper
+                +playIcon
+              .title Pitches
+        //-.node.inner.top(data-action="trailers")
+          .dot
+            .dotInner
+              .iconWrapper
+                +playIcon
+              .title Trailers
+        //-.node.inner.top(data-action="pilots")
+          .dot
+            .dotInner
+              .iconWrapper
+                +loginIcon
+              .title Pilots
+        //-.node.inner.top(data-action="releases")
+          .dot
+            .dotInner
+              .iconWrapper
+                +loginIcon
+              .title Releases
+    if currentUser
+      .node.outer.top.right(data-action="create")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +coins
+              +createIcon
+            .title Create Film
+    //-if routeIsBrowse
+      .node.outer.right(data-action="about")
+        .dot
+          .dotInner
+            .iconWrapper
+              +aboutIcon
+            .title About
+      .node.outer.bottom.right(data-action="profile")
+        .dot
+          .dotInner
+            .iconWrapper
+              +profileIcon
+      .node.outer.bottom(data-action="contentCommunity")
+        .dot
+          .dotInner
+            .iconWrapper
+              +communityIcon
+            .title Community
+    if routeIsContent
+      .node.outer.left(data-action="fund")
+        .dot
+          .dotInner
+            .iconWrapper
+              +fundIcon
             .title Fund
-      .node.top.right(data-action="browse")
+      .node.outer.top(data-action="browse")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +projects
+              +browseIcon
             .title Browse
-      .node.right(data-action="about")
+      if routeIsNot "contentAbout"
+        .node.outer.bottom(data-action="contentAbout")
+          .dot
+            .dotInner
+              .iconWrapper
+                +aboutIcon
+              .title About
+      if routeIsNot "community"
+        .node.outer.bottom(data-action="contentCommunity")
+          .dot
+            .dotInner
+              .iconWrapper
+                +communityIcon
+              .title Community
+      .node.outer.right(data-action="profileAbout")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +about
-    else
-      .node.right(data-action="play")
+              +profileIcon
+            .title Jesse Lipscombe
+    if routeIsProfile
+      .node.outer.top(data-action="browse")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +play
+              +browseIcon
+            .title Browse
+      if routeIsNot "profileAbout"
+        .node.outer.bottom(data-action="profileAbout")
+          .dot
+            .dotInner
+              .iconWrapper
+                +profileIcon
+              .title Jesse Lipscombe
+      if routeIsNot "profileCommunity"
+        .node.outer.bottom(data-action="profileCommunity")
+          .dot
+            .dotInner
+              .iconWrapper
+                +communityIcon
+              .title Community
+      .node.outer.left(data-action="fund")
+        .dot
+          .dotInner
+            .iconWrapper
+              +fundIcon
+            .title Fund
+      .node.outer.right(data-action="follow")
+        .dot
+          .dotInner
+            .iconWrapper
+              +followIcon
+            .title Follow Jesse
+    if menuIs "view"
+      .node.outer.left(data-action="play")
+        .dot
+          .dotInner
+            .iconWrapper
+              +playIcon
             .title Play
-      .node.bottom.right(data-action="create")
+      .node.outer.top(data-action="contentAbout")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +add
-            .title Create
-      .node.bottom(data-action="addMedia")
+              +aboutIcon
+            .title About
+      .node.outer.right(data-action="profileAbout")
+          .dot
+            .dotInner
+              .iconWrapper
+                +profileIcon
+              .title Jesse Lipscombe
+      .node.outer.bottom(data-action="contentCommunity")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +media
-            .title Add Media
-      .node.bottom.left(data-action="addPoll")
+              +communityIcon
+            .title Community
+    if menuIs "edit"
+      .node.outer.bottom.left(data-action="edit")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +poll
-            .title Add Poll
-      .node.left(data-action="edit")
-        .dot
-          .inner
-            .iconWrapper
-              +edit
+              +editIcon
             .title Edit
-      .node.top.left(data-action="follow")
+      .node.outer.bottom.right(data-action="addPane")
         .dot
-          .inner
+          .dotInner
             .iconWrapper
-              +follow
-            .title Follow
+              +addIcon
+    if menuIs "topic"
+      .node.outer.bottom.left(data-action="addMedia")
+        .dot
+          .dotInner
+            .iconWrapper
+              +uploadIcon
+            .title Add Media
+      .node.outer.bottom.right(data-action="addReply")
+        .dot
+          .dotInner
+            .iconWrapper
+              +addIcon
+            .title Reply
+
+
+template(name="cover")
+  .cover(data-state=cover)
+    .coverContent
+      .coverMessage(data-state="{{coverState 'message'}}")
+        .coverMessageIcon
+          +clapperIcon
+        .serverMessage(data-state=logoutErrorExists)
+          = logoutError
+        //-.title Logging In..
+      .coverInfoWrapper
+        .coverInfo(data-state="{{coverState 'signup'}}")
+          .title Signup
+          .serverMessage(data-state=serverErrorExists)
+            = serverError
+          +autoForm class="coverForm" id="signupForm" schema=Schema.signupFormSchema
+            .coverFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='username'}}error{{/if}}")
+              +afFieldInput class="coverFormInput" name="username" type="text" placeholder="Username" autocomplete="off"
+              .coverFormMessage(data-state="{{#if afFieldIsInvalid name='username'}}active{{/if}}")
+                {{{afFieldMessage name="username"}}}
+            .coverFormInputWrapper.second(data-state="{{#if afFieldIsInvalid name='email'}}error{{/if}}")
+              +afFieldInput class="coverFormInput" name="email" type="email" placeholder="email@email.com" autocomplete="off"
+              .coverFormMessage(data-state="{{#if afFieldIsInvalid name='email'}}active{{/if}}")
+                {{{afFieldMessage name="email"}}}
+            .coverFormInputWrapper.third(data-state="{{#if afFieldIsInvalid name='password'}}error{{/if}}")
+              +afFieldInput class="coverFormInput" name="password" type="password" placeholder="Password" autocomplete="off"
+              .coverFormMessage(data-state="{{#if afFieldIsInvalid name='password'}}active{{/if}}")
+                {{{afFieldMessage name="password"}}}
+            button.coverFormSubmit(type="submit")
+      .coverInfoWrapper
+        .coverInfo(data-state="{{coverState 'login'}}")
+          .title Login
+          .serverMessage(data-state=serverErrorExists)
+            = serverError
+          +autoForm class="coverForm" id="loginForm" schema=Schema.loginFormSchema
+            .coverFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='usernameOrEmail'}}error{{/if}}")
+              +afFieldInput class="coverFormInput" name="usernameOrEmail" type="text" placeholder="Username Or Email" autocomplete="off"
+              .coverFormMessage(data-state="{{#if afFieldIsInvalid name='usernameOrEmail'}}active{{/if}}")
+                {{{afFieldMessage name="usernameOrEmail"}}}
+            .coverFormInputWrapper.second(data-state="{{#if afFieldIsInvalid name='password'}}error{{/if}}")
+              +afFieldInput class="coverFormInput" name="password" type="password" placeholder="Password" autocomplete="off"
+              .coverFormMessage(data-state="{{#if afFieldIsInvalid name='password'}}active{{/if}}")
+                {{{afFieldMessage name="password"}}}
+            button.coverFormSubmit(type="submit")
+
 
 template(name="browse")
-  //-.scroller
   .browse
-    .title.clickable(data-state=focused) Trailers
+    .title(data-state=focused) Cinder
     .tiles
       each projects
         +tile
 
 template(name="tile")
-  .tile.clickable(href="about",data-menu="view",data-state=focused)
-    .preview
+  .tile.clickable(data-menu="view",data-property=_id,data-state="{{focused _id}}",data-href=_id)
+    .preview(style=previewSrc)
     .title= title
     .subtitle= owner
 
-template(name="about")
+template(name="contentAbout")
   //-.scroller
-  .about
-    .title Video Game Highschool
-    .author Freddy Wong
-    .description
-      | The about page overlaps the video by default, unless the currently uploaded video is actually playing.
-      | If the currently uplaoded video is actually playing, then the about page will slide down a bit to show
-      | the majority of the video, as well as the actual video controls. The user can gain access to the about
-      | page simply by scrolling back up again, and the about page will overlap the video accordingly.
-      br
-      | The user can view the video again by scrolling back down, and resume play that way, or by clicking "play"
-      | located on the right. The user is able to add text by default, and can place an image or video inline by
-      | clicking and holding down with the mouse button, and choosing the "add media" button. Alternatively, text
-      | can be either styled via a hotkey, or be made to be a header. Media can be relocated by dragging and dropping.
+  .contentAbout
+    .pane
+      with currentContent
+        .title.clickable(data-menu="edit",data-property="title",data-state="{{focused 'title'}}")= title
+        .author(data-state=focused)= owner
+        .description.clickable(data-menu="edit",data-property="content",data-state="{{focused 'content'}}")= content
+    .pane
+      | Image
 
-template(name="community")
+template(name="contentCommunity")
   .community
-    .currentTopic
-      .section Video Game Highschool
-      .topic
-        .title What's your favorite part?
-        .avatar
-        .author Andrew Guardamano
-        .description
-          | The community feature will be an important
-          | part of the platform, and will allow users to
-          | post threads for discussion, place rich media inline,
-          | and put money towards projects at any time, as well as make use of
-          | polls and other useful features.
-      .topic
-        .avatar
-        .author Pieter Parker
-        .description
-          | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-          | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-          | Nullam eget congue odio. Nullam quis gravida magna.
-          | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-          | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-          | mi, vel aliquet diam laoreet id.
-        .topic
-          .avatar
-          .author Peter Baden
-          .description
-            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-            | Nullam eget congue odio. Nullam quis gravida magna.
-            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-            | mi, vel aliquet diam laoreet id.
+    with currentContent
+      .currentTopic
+        .section(data-menu="edit",data-state=focused)= title
+        .slider
           .topic
-            .avatar
-            .author Andrew Guardamano
-            .description
-              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-              | Nullam eget congue odio. Nullam quis gravida magna.
-              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-              | mi, vel aliquet diam laoreet id.
-        .topic
-          .avatar
-          .author Pieter Parker
-          .description
-            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-            | Nullam eget congue odio. Nullam quis gravida magna.
-            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-            | mi, vel aliquet diam laoreet id.
+            .title(data-menu="edit",data-state=focused) What's your favorite part?
+            .avatar(data-state=focused,style="background-image:url('andrew.png');")
+            .author(data-state=focused) Andrew Guardamano
+            .description(data-menu="edit",data-state=focused)
+              | The community feature will be an important
+              | part of the platform, and will allow users to
+              | post threads for discussion, place rich media inline,
+              | and put money towards projects at any time, as well as make use of
+              | polls and other useful features.
           .topic
-            .avatar
-            .author Peter Baden
+            .avatar(style="background-image:url('jesse.png');")
+            .author Jesse Lipscombe
             .description
               | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
               | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
@@ -178,47 +358,7 @@ template(name="community")
               | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
               | mi, vel aliquet diam laoreet id.
             .topic
-              .avatar
-              .author Andrew Guardamano
-              .description
-                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                | Nullam eget congue odio. Nullam quis gravida magna.
-                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                | mi, vel aliquet diam laoreet id.
-        .topic
-          .avatar
-          .author Pieter Parker
-          .description
-            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-            | Nullam eget congue odio. Nullam quis gravida magna.
-            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-            | mi, vel aliquet diam laoreet id.
-          .topic
-            .avatar
-            .author Peter Baden
-            .description
-              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-              | Nullam eget congue odio. Nullam quis gravida magna.
-              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-              | mi, vel aliquet diam laoreet id.
-            .topic
-              .avatar
-              .author Andrew Guardamano
-              .description
-                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                | Nullam eget congue odio. Nullam quis gravida magna.
-                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                | mi, vel aliquet diam laoreet id.
-            .topic
-              .avatar
+              .avatar(style="background-image:url('peter.png');")
               .author Peter Baden
               .description
                 | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
@@ -228,7 +368,7 @@ template(name="community")
                 | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
                 | mi, vel aliquet diam laoreet id.
               .topic
-                .avatar
+                .avatar(style="background-image:url('andrew.png');")
                 .author Andrew Guardamano
                 .description
                   | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
@@ -237,8 +377,68 @@ template(name="community")
                   | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
                   | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
                   | mi, vel aliquet diam laoreet id.
+            .topic
+              .avatar(style="background-image:url('jesse.png');")
+              .author Jesse Lipscombe
+              .description
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                | Nullam eget congue odio. Nullam quis gravida magna.
+                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                | mi, vel aliquet diam laoreet id.
+              .topic
+                .avatar(style="background-image:url('peter.png');")
+                .author Peter Baden
+                .description
+                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                  | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                  | Nullam eget congue odio. Nullam quis gravida magna.
+                  | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                  | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                  | mi, vel aliquet diam laoreet id.
                 .topic
-                  .avatar
+                  .avatar(style="background-image:url('andrew.png');")
+                  .author Andrew Guardamano
+                  .description
+                    | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                    | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                    | Nullam eget congue odio. Nullam quis gravida magna.
+                    | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                    | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                    | mi, vel aliquet diam laoreet id.
+            .topic
+              .avatar(style="background-image:url('jesse.png');")
+              .author Jesse Lipscombe
+              .description
+                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                | Nullam eget congue odio. Nullam quis gravida magna.
+                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                | mi, vel aliquet diam laoreet id.
+              .topic
+                .avatar(style="background-image:url('peter.png');")
+                .author Peter Baden
+                .description
+                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                  | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                  | Nullam eget congue odio. Nullam quis gravida magna.
+                  | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                  | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                  | mi, vel aliquet diam laoreet id.
+                .topic
+                  .avatar(style="background-image:url('andrew.png');")
+                  .author Andrew Guardamano
+                  .description
+                    | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                    | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                    | Nullam eget congue odio. Nullam quis gravida magna.
+                    | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                    | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                    | mi, vel aliquet diam laoreet id.
+                .topic
+                  .avatar(style="background-image:url('peter.png');")
                   .author Peter Baden
                   .description
                     | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
@@ -248,7 +448,7 @@ template(name="community")
                     | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
                     | mi, vel aliquet diam laoreet id.
                   .topic
-                    .avatar
+                    .avatar(style="background-image:url('andrew.png');")
                     .author Andrew Guardamano
                     .description
                       | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
@@ -258,7 +458,7 @@ template(name="community")
                       | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
                       | mi, vel aliquet diam laoreet id.
                     .topic
-                      .avatar
+                      .avatar(style="background-image:url('peter.png');")
                       .author Peter Baden
                       .description
                         | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
@@ -268,7 +468,7 @@ template(name="community")
                         | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
                         | mi, vel aliquet diam laoreet id.
                       .topic
-                        .avatar
+                        .avatar(style="background-image:url('andrew.png');")
                         .author Andrew Guardamano
                         .description
                           | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
@@ -277,37 +477,127 @@ template(name="community")
                           | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
                           | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
                           | mi, vel aliquet diam laoreet id.
+                        .topic
+                          .avatar(style="background-image:url('peter.png');")
+                          .author Peter Baden
+                          .description
+                            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                            | Nullam eget congue odio. Nullam quis gravida magna.
+                            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                            | mi, vel aliquet diam laoreet id.
+                          .topic
+                            .avatar(style="background-image:url('andrew.png');")
+                            .author Andrew Guardamano
+                            .description
+                              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
+                              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
+                              | Nullam eget congue odio. Nullam quis gravida magna.
+                              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
+                              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
+                              | mi, vel aliquet diam laoreet id.
 
+
+      .topics
+        .topic
+          .title What’s your favorite part?
+          .avatar(style="background-image:url('andrew.png');")
+          .author Andrew Guardamano
+          .description
+            | The Community feature will be an important
+            | part of the platform, and will allow users to
+            | post threads for discussion, place rich media..
+        .topic
+          .title What should we make next?
+          .avatar(style="background-image:url('jesse.png');")
+          .author Jesse Lipscombe
+          .description
+            | The Community feature will be an important
+            | part of the platform, and will allow users to
+            | post threads for discussion, place rich media..
+        .topic
+          .title What’s your favorite part?
+          .avatar(style="background-image:url('andrew.png');")
+          .author Andrew Guardamano
+          .description
+            | The Community feature will be an important
+            | part of the platform, and will allow users to
+            | post threads for discussion, place rich media..
+
+template(name="profileAbout")
+  .profileAbout
+    with currentProfile
+      each profile.panes
+        .pane.clickable(data-menu="edit",data-state=focused)
+          .title= title
+          .author= subtitle
+          .description= content
+      //-.pane
+        .title.clickable(data-menu="edit",data-property="username",data-state="{{focused 'username'}}")
+          .innerText(data-state="{{editing 'username'}}")= username
+          +autoForm data-state=editing class="inlineForm" id="usernameForm" schema=Schema.usernameFormSchema collection=Meteor.users doc=currentUser
+            .inlineFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='username'}}error{{/if}}")
+              +afFieldInput class="inlineFormInput" name="username" type="text" placeholder="Title" autocomplete="off"
+              .inlineFormMessage(data-state="{{#if afFieldIsInvalid name='username'}}active{{/if}}")
+                {{{afFieldMessage name="username"}}}
+            button.inlineFormSubmit(type="submit")
+        .author.clickable(data-menu="edit",data-property="profile.role",data-state="{{focused 'profile.role'}}")
+          .innerText(data-state="{{editing 'profile.role'}}")= profile.role
+          +autoForm data-state=editing class="inlineForm" id="roleForm" schema=Schema.roleFormSchema collection=Meteor.users doc=currentUser
+            .inlineFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='profile.role'}}error{{/if}}")
+              +afFieldInput class="inlineFormInput" name="profile.role" type="text" placeholder="Title" autocomplete="off"
+              .inlineFormMessage(data-state="{{#if afFieldIsInvalid name='profile.role'}}active{{/if}}")
+                {{{afFieldMessage name="profile.role"}}}
+            button.inlineFormSubmit(type="submit")
+        .description.clickable(data-menu="edit",data-property="profile.bio",data-state="{{focused 'profile.bio'}}")
+          .innerText(data-state="{{editing 'profile.bio'}}")= profile.bio
+          +autoForm data-state=editing class="inlineForm" id="roleForm" schema=Schema.bioFormSchema collection=Meteor.users doc=currentUser
+            .inlineFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='profile.bio'}}error{{/if}}")
+              +afFieldInput class="inlineFormInput" name="profile.bio" type="text" placeholder="Title" autocomplete="off" rows=100
+              .inlineFormMessage(data-state="{{#if afFieldIsInvalid name='profile.bio'}}active{{/if}}")
+                {{{afFieldMessage name="profile.bio"}}}
+            button.inlineFormSubmit(type="submit")
+      //-.pane.browse
+        .title.clickable(data-state=focused) Creations
+        .tiles
+          each projects
+            +tile
+
+template(name="profileCommunity")
+  .community
+    .currentTopic
+      with currentTopic
+        .section(data-state=focused)= username
+        +topic
+      each childTopics
+        +topic
 
     .topics
-      .topic
-        .title What’s your favorite part?
-        .avatar
-        .author Andrew Guardamano
-        .description
-          | The Community feature will be an important
-          | part of the platform, and will allow users to
-          | post threads for discussion, place rich media..
-      .topic
-        .title What’s your favorite part?
-        .avatar
-        .author Andrew Guardamano
-        .description
-          | The Community feature will be an important
-          | part of the platform, and will allow users to
-          | post threads for discussion, place rich media..
-      .topic
-        .title What’s your favorite part?
-        .avatar
-        .author Andrew Guardamano
-        .description
-          | The Community feature will be an important
-          | part of the platform, and will allow users to
-          | post threads for discussion, place rich media..
+      each topics
+        +topic
 
+template(name="topic")
+  .topic(data-state="{{focused _id}}")
+    if title
+      .title= title
+    .avatar(style="background-image:url('andrew.png');")
+    .author= subtitle
+    .description.editor.clickable(data-menu="topic")
+      //-= content
+      {{{content}}}
+      //-= content
+      //-+editor
+  each topicComments
+    with this
+      +topic
+
+//-template(name="editor")
+  .editor(data-state="{{focused _id}}",data-menu="addMedia")
+    {{{content}}}
 
 //-Icons
-template(name="coins")
+template(name="fundIcon")
   svg.icon(viewBox="0 0 100 100")
     path.iconFill(d="M46.935,19.523c0,4.593-10.506,8.315-23.469,8.315C10.509,27.838,0,24.116,0,19.523c0-4.595,10.508-8.316,23.465-8.316C36.429,11.208,46.935,14.929,46.935,19.523")
     path.iconFill(d="M46.935,25.406c0,4.593-10.506,8.317-23.469,8.317C10.509,33.723,0,29.999,0,25.406v8.696c0,4.593,10.508,8.317,23.465,8.317c12.963,0,23.469-3.724,23.469-8.317V25.406z")
@@ -318,19 +608,19 @@ template(name="coins")
     path.iconFill(d="M100,56.398c0,4.591-10.507,8.314-23.469,8.314c-12.956,0-23.465-3.724-23.465-8.314v8.695c0,4.592,10.509,8.314,23.465,8.314c12.962,0,23.469-3.723,23.469-8.314V56.398z")
     path.iconFill(d="M100,71.781c0,4.595-10.507,8.315-23.469,8.315c-12.956,0-23.465-3.721-23.465-8.315v8.695c0,4.595,10.509,8.315,23.465,8.315c12.962,0,23.469-3.721,23.469-8.315V71.781z")
 
-template(name="play")
+template(name="playIcon")
   svg.icon(viewBox="0 0 100 100")
     polygon.iconFill(points="22.02,14.02 93.98,50.004 22.02,85.98")
 
-template(name="add")
+template(name="addIcon")
   svg.icon(viewBox="0 0 100 100")
     path.iconFill(d="M91.111,42.222H57.777V8.889C57.777,4,54.277,0,50,0c-4.278,0-7.778,4-7.778,8.889v33.333H8.889C4,42.222,0,45.722,0,50c0,4.277,4,7.777,8.889,7.777h33.333v33.334C42.222,96,45.722,100,50,100c4.277,0,7.777-4,7.777-8.889V57.777h33.334C96,57.777,100,54.277,100,50C100,45.722,96,42.222,91.111,42.222z")
 
-template(name="media")
+template(name="mediaIcon")
   svg.icon(viewBox="0 0 100 100")
     path.iconFill(d="M0,16.25v67.5c0,6.299,1.275,7.5,7.5,7.5h85c6.174,0,7.5-1.15,7.5-7.5v-67.5c0-6.15-1.177-7.5-7.5-7.5h-85C1.299,8.75,0,9.824,0,16.25z M88.225,73.75H11.826c8.35-12.176,23.199-32.475,26.973-32.475c3.652,0,16.05,16.401,21.65,22.174c0,0,7.202-9.623,10.977-9.623C75.273,53.826,88.101,73.65,88.225,73.75z M65.776,31.25c0-5.1,4.124-9.224,9.224-9.224s9.224,4.124,9.224,9.224S80.1,40.474,75,40.474S65.776,36.35,65.776,31.25z")
 
-template(name="poll")
+template(name="pollIcon")
   svg.icon(viewBox="0 0 100 100")
     rect.iconFill(x="26",y="17",width="74",height="16")
     rect.iconFill(x="26",y="44",width="53",height="16")
@@ -339,25 +629,70 @@ template(name="poll")
     circle.iconFill(cx="8.438",cy="52.093",r="7.896")
     circle.iconFill(cx="8.438",cy="77.645",r="7.896")
 
-template(name="edit")
+template(name="editIcon")
   svg.icon(viewBox="0 0 100 100")
     polygon.iconFill(points="15.081,64.076 37.24,85.402 79.92,41.819 57.762,20.5")
     polygon.iconFill(points="31.516,91.254 9.356,69.928 0,100")
     path.iconFill(d="M0,100")
     polygon.iconFill(points="77.841,0 63.5,14.641 85.658,35.966 100,21.319")
 
-template(name="follow")
+template(name="followIcon")
   svg.icon(viewBox="0 0 100 100")
     polygon.iconFill(points="50,2.449 65.454,33.754 100,38.775 75.002,63.142 80.904,97.552 50,81.307 19.101,97.552 25.002,63.142 0,38.775 34.551,33.754")
 
-template(name="login")
-  svg.icon(viewBox="0 0 100 100")
-
-template(name="projects")
-  svg.icon(viewBox="0 0 100 100")
-
 template(name="aboutIcon")
   svg.icon(viewBox="0 0 100 100")
+    polygon.iconFill(points="1,83.641 34.287,71.758 39.744,15.472 15.743,27.12")
+    polygon.iconFill(points="63.988,27.617 68.854,83.641 98.002,71.862 83.851,16.075")
+    polygon.iconFill(points="40.909,15.488 35.971,71.758 67.063,83.641 62.713,27.604")
 
 template(name="communityIcon")
   svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M64.041,56.215H44.574c-4.047,0-7.342-3.293-7.342-7.342v-19.1H6.695C4.102,29.773,2,31.876,2,34.469v35.574 c0,2.592,2.102,4.695,4.695,4.695h18.041l0.261,12.705L38.65,74.738h24.959c2.593,0,4.695-2.104,4.695-4.695v-9.859l-2.333-2.172 L64.041,56.215z")
+    path.iconFill(d="M46.866,50.498H67.68l2.918,2.713l8.468,7.883l0.219-10.596h15.044c2.163,0,3.916-1.754,3.916-3.917V16.916 c0-2.163-1.753-3.916-3.916-3.916H46.866c-2.163,0-3.914,1.753-3.914,3.916V27.48v19.101 C42.952,48.744,44.704,50.498,46.866,50.498z")
+
+
+template(name="profileIcon")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M100,50.065c0,0-20.131,34.743-50.002,34.743C20.125,84.809,0,50.065,0,50.065s20.125-34.874,49.998-34.874C79.869,15.191,100,50.065,100,50.065z M74.484,50.065c0-13.462-11.025-24.487-24.487-24.487S25.509,36.603,25.509,50.065s11.027,24.487,24.488,24.487S74.484,63.528,74.484,50.065z M49.998,39.04c-6.024,0-10.898,5.128-10.898,11.025c0,6.025,4.874,10.897,10.898,10.897c5.9,0,11.026-4.872,11.026-10.897C61.023,44.168,55.897,39.04,49.998,39.04z")
+
+template(name="loginIcon")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="accountIcon")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M50.001,0c12.116,0,21.933,9.816,21.933,21.93c0,12.126-9.816,21.946-21.933,21.946 c-12.124,0-21.937-9.82-21.937-21.946C28.064,9.816,37.877,0,50.001,0z")
+    path.iconFill(d="M9.114,90.295c0-19.403,18.297-34.05,40.887-34.05c22.593,0,40.885,14.646,40.885,34.05 C90.886,103.234,9.114,103.234,9.114,90.295z")
+
+
+template(name="createIcon")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M50,0C22.386,0,0,22.386,0,50s22.386,50,50,50c27.613,0,50-22.386,50-50S77.613,0,50,0z M8.369,42.026c0-5.817,4.717-10.532,10.533-10.532c5.817,0,10.532,4.715,10.532,10.532c0,5.816-4.715,10.533-10.532,10.533C13.086,52.559,8.369,47.842,8.369,42.026z M30.082,87.276c-5.818,0-10.533-4.714-10.533-10.53s4.715-10.533,10.533-10.533c5.814,0,10.532,4.717,10.532,10.533S35.897,87.276,30.082,87.276z M50.097,54.896c-2.915,0-5.274-2.362-5.274-5.275s2.359-5.274,5.274-5.274c2.913,0,5.274,2.361,5.274,5.274S53.01,54.896,50.097,54.896z M50.047,27.802c-5.817,0-10.533-4.715-10.533-10.532c0-5.817,4.716-10.533,10.533-10.533c5.815,0,10.53,4.715,10.53,10.533C60.577,23.087,55.862,27.802,50.047,27.802z M70.011,87.276c-5.817,0-10.534-4.714-10.534-10.53s4.717-10.533,10.534-10.533c5.815,0,10.53,4.717,10.53,10.533S75.826,87.276,70.011,87.276z M80.391,52.558c-5.815,0-10.533-4.715-10.533-10.533c0-5.818,4.718-10.532,10.533-10.532c5.816,0,10.531,4.715,10.531,10.532C90.922,47.841,86.207,52.558,80.391,52.558z")
+
+template(name="uploadIcon")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="clapperIcon")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M27.479,43.161c0,6.004-4.804,10.907-10.908,10.907v42.83c0,1.699,1.4,3.102,3.104,3.102H87.92c1.701,0,3.104-1.4,3.104-3.102V43.161H27.479z M39.486,56.971H26.978l6.204-10.007H45.89L39.486,56.971z M60.297,56.971H47.391l6.203-10.007h12.709L60.297,56.971z M80.812,56.971H67.904l6.203-10.007h12.709L80.812,56.971z")
+    path.iconFill(d="M24.475,43.161c0-4.203-3.401-7.705-7.704-7.705c-4.304,0-7.806,3.402-7.806,7.705c0,4.203,3.401,7.706,7.704,7.706C20.973,50.867,24.475,47.364,24.475,43.161z")
+    path.iconFill.clapper(data-state=clapperState,d="M16.56,31.598c5.891,0.124,10.828,5.376,10.905,11.564h63.57V28.259c-0.082-2.193-1.859-3.133-3.16-3.121H19.718c-2.062,0.026-3.096,1.386-3.158,2.873V31.598z M80.572,28.707l6.115,9.973H74.07l-6.117-9.973H80.572z M59.963,28.707l6.209,9.973l-12.709,0l-6.207-9.973L59.963,28.707z M39.45,28.707l6.209,9.973h-12.71l-6.21-9.973H39.45z")
+
+template(name="pilotsIcon")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M49.643,38.061c-3.292,0-5.97,2.678-5.97,5.97S46.352,50,49.643,50s5.969-2.677,5.969-5.969C55.612,40.739,52.935,38.061,49.643,38.061z")
+    path.iconFill(d="M84.694,17.347H15.306c-1.69,0-3.061,1.371-3.061,3.062v42.856c0,1.691,1.371,3.062,3.061,3.062h69.389c1.69,0,3.061-1.37,3.061-3.062V20.409C87.755,18.718,86.384,17.347,84.694,17.347z M48.163,27.545c0-1.011,0.823-1.831,1.837-1.831c1.015,0,1.837,0.82,1.837,1.831v2.563c0,1.011-0.822,1.831-1.837,1.831c-1.014,0-1.837-0.82-1.837-1.831V27.545z M36.026,45.921h-2.563c-1.011,0-1.831-0.823-1.831-1.838s0.82-1.838,1.831-1.838h2.563c1.011,0,1.831,0.823,1.831,1.838S37.037,45.921,36.026,45.921z M38.691,35.582l-1.825-1.824c-0.72-0.72-0.72-1.886,0-2.606c0.72-0.719,1.887-0.719,2.606,0l1.825,1.824c0.719,0.72,0.719,1.886,0,2.606c-0.36,0.359-0.832,0.54-1.303,0.54S39.051,35.941,38.691,35.582z M53.857,53.007v4.342c0,0.337-0.272,0.61-0.607,0.61h-6.806c-0.335,0-0.607-0.273-0.607-0.61v-4.342c-3.32-1.535-5.632-4.909-5.632-8.817c0-5.349,4.326-9.7,9.643-9.7s9.643,4.351,9.643,9.699C59.49,48.098,57.178,51.472,53.857,53.007z M60.006,36.122c-0.471,0-0.942-0.18-1.303-0.54c-0.72-0.719-0.72-1.886,0-2.605l1.824-1.825c0.72-0.719,1.887-0.719,2.606,0s0.72,1.886,0,2.606l-1.824,1.824C60.95,35.942,60.478,36.122,60.006,36.122z M66.435,45.921h-2.563c-1.011,0-1.83-0.823-1.83-1.838s0.819-1.838,1.83-1.838h2.563c1.012,0,1.831,0.823,1.831,1.838S67.446,45.921,66.435,45.921z")
+    path.iconFill(d="M91.837,5.102H8.164C3.655,5.102,0,8.756,0,13.265v57.143c0,4.509,3.655,8.163,8.164,8.163H71.53l16.327,16.327V78.571h3.979c4.508,0,8.163-3.654,8.163-8.163V13.265C100,8.757,96.345,5.102,91.837,5.102z M89.796,64.286c0,2.255-1.828,4.081-4.082,4.081H14.286c-2.254,0-4.082-1.827-4.082-4.081V19.387c0-2.254,1.828-4.081,4.082-4.081h71.428c2.255,0,4.082,1.827,4.082,4.081V64.286z")
+
+template(name="browseIcon")
+  svg.icon(viewBox="0 0 100 100")
+    path.iconFill(d="M3.333,0h20c1.839,0,3.333,1.492,3.333,3.333v20c0,1.842-1.494,3.334-3.333,3.334h-20C1.492,26.667,0,25.175,0,23.333v-20C0,1.492,1.491,0,3.333,0z")
+    path.iconFill(d="M3.333,36.667h20c1.839,0,3.333,1.49,3.333,3.334v19.998c0,1.844-1.494,3.334-3.333,3.334h-20C1.492,63.333,0,61.843,0,59.999V40.001C0,38.158,1.491,36.667,3.333,36.667z")
+    path.iconFill(d="M3.333,73.333h20c1.839,0,3.333,1.491,3.333,3.335v19.999c0,1.843-1.494,3.333-3.333,3.333h-20C1.492,100,0,98.51,0,96.667V76.668C0,74.824,1.491,73.333,3.333,73.333z")
+    path.iconFill(d="M40,0h20c1.84,0,3.334,1.492,3.334,3.333v20c0,1.842-1.494,3.334-3.334,3.334H40c-1.842,0-3.333-1.492-3.333-3.334v-20C36.667,1.492,38.157,0,40,0z")
+    path.iconFill(d="M40,36.667h20c1.84,0,3.334,1.49,3.334,3.334v19.998c0,1.844-1.494,3.334-3.334,3.334H40c-1.842,0-3.333-1.49-3.333-3.334V40.001C36.667,38.158,38.157,36.667,40,36.667z")
+    path.iconFill(d="M40,73.333h20c1.84,0,3.334,1.491,3.334,3.335v19.999C63.334,98.51,61.84,100,60,100H40c-1.842,0-3.333-1.49-3.333-3.333V76.668C36.667,74.824,38.157,73.333,40,73.333z")
+    path.iconFill(d="M76.667,0h20C98.505,0,100,1.492,100,3.333v20c0,1.842-1.494,3.334-3.333,3.334h-20c-1.843,0-3.333-1.492-3.333-3.334v-20C73.333,1.492,74.825,0,76.667,0z")
+    path.iconFill(d="M76.667,36.667h20c1.838,0,3.333,1.49,3.333,3.334v19.998c0,1.844-1.494,3.334-3.333,3.334h-20c-1.843,0-3.333-1.49-3.333-3.334V40.001C73.333,38.158,74.825,36.667,76.667,36.667z")
+    path.iconFill(d="M76.667,73.333h20c1.838,0,3.333,1.491,3.333,3.335v19.999c0,1.843-1.494,3.333-3.333,3.333h-20c-1.843,0-3.333-1.49-3.333-3.333V76.668C73.333,74.824,74.825,73.333,76.667,73.333z")
+

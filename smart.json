@@ -1,23 +1,13 @@
 {
-  "meteor": {
-    "branch": "shark"
-  },
+  "meteor": {},
   "packages": {
-    "iron-router": {
-      "git": "https://github.com/EventedMind/iron-router.git",
-      "branch": "blaze-integration"
-    },
-    "blaze-layout": {
-      "git": "https://github.com/EventedMind/blaze-layout.git",
-      "branch": "devel"
-    },
+    "iron-router": {},
     "jade": {},
-    "autoform": {
-      "git": "https://github.com/aldeed/meteor-autoform.git",
-      "branch": "ui"
-    },
     "underscore-string-latest": {},
-    "fastclick": {},
-    "jquery.transit": {}
+    "collectionFS": {},
+    "cfs-gridfs": {},
+    "stripe": {},
+    "collection-helpers": {},
+    "medium-editor-updated": {}
   }
 }

@@ -31,108 +31,59 @@ body
   box-sizing border-box
 
 .clickable
+  //transform translate3d(0,0,0)
+  //transition opacity 100ms ease-in-out, transform 100ms ease-in-out
+[data-state]
   transition opacity 100ms ease-in-out, transform 100ms ease-in-out
-  &[data-state="focused"]
-    opacity 0.8
-    transform scale3d(1.1,1.1,1.1)
-  &[data-state="blurred"]
-    opacity 0.2
-    transform scale3d(0.8,0.8,0.8)
+[data-state="focused"]
+  //background red
+  opacity 0.8
+  transform scale3d(1,1,1)
+[data-state="blurred"]
+  //background blue
+  opacity 0.2
+  transform scale3d(0.8,0.8,0.8)
+[data-state="hidden"]
+  opacity 0.1
+  transform scale3d(0.4,0.4,0.4)
 
 .firstPane
-  display -webkit-box
-  -webkit-box-orient vertical
-  -webkit-box-align stretch
-  -webkit-box-flex 1
-  -webkit-overflow-scrolling touch
+  display flex
+  webkit-box-orient vertical
+  webkit-box-align stretch
+  //-webkit-box-flex 1
+  flex 1
   overflow auto
+  //margin-bottom -1px
   position relative
   z-index 1
 .secondPane
-  display -webkit-box
-  -webkit-box-orient vertical
-  -webkit-box-align stretch
-  -webkit-box-flex 1
-  -webkit-overflow-scrolling touch
+  display flex
+  webkit-box-orient vertical
+  webkit-box-align stretch
+  //-webkit-box-flex 1
+  flex 1
+  //margin-bottom -1px
+  position relative
   overflow auto
 .thirdPane
-  display -webkit-box
-  -webkit-box-orient vertical
-  -webkit-box-align stretch
-  -webkit-box-flex 1
+  //display -webkit-box
+  display flex
+  webkit-box-orient vertical
+  webkit-box-align stretch
+  //-webkit-box-flex 1
+  flex 1
   margin-bottom -1px
   position relative
-
-.sidebar
-  position fixed
-  top 0
-  bottom 0
-  width 170px
-  //background midnight()
-  //color white()
-  color midnight()
-  overflow-y scroll
-  overflow-x hidden
-  &.right
-    right 0
-    border-left 1px solid offWhite()
-  &.left
-    left 0
-    border-right 1px solid offWhite()
-  .create
-    size(170,170)
-    //background gray()
-    border-bottom 1px solid offWhite()
-  .title
-    padding-left 10px
-    padding-right 10px
-    futura()
-    color offGray()
-    font-size 10px
-    text-align left
-  .logo
-    margin-bottom 10px
-    padding 0 10px 0 50px
-    height 50px
-    line-height 50px
-    display block
-    futura()
-    font-size 18px
-    text-align left
-    .icon
-      size(30,30)
-      border-radius 30px
-      position absolute
-      top 10px
-      left 10px
-      //background white()
-      background midnight()
-  .list
-    margin-bottom 20px
-    .item
-      .link
-        padding-left 34px
-        padding-right 10px
-        position relative
-        font-size 14px
-        height 30px
-        line-height 30px
-        display block
-        &:hover
-          background gray()
-          color offWhite()
-          .icon
-            & > *
-              fill offWhite()
-              stroke offWhite()
-        .icon
-          position absolute
-          top 7px
-          left 10px
-          size(16,16)
-          //background white()
-          background midnight()
-          border-radius 16px
+  //flex-flow row wrap
+  //justify-content center
+  //align-content center
+  //Maybe this is needed?
+  //overflow auto
+  //padding-bottom 10px
+  //overflow auto
+  //-webkit-overflow-scrolling touch
+  //transform translate3d(0,0,0)
 .content
   position absolute
   top 0
@@ -147,35 +98,91 @@ body
   //margin-left 170px
   //height 10000px
 .title
-  //text-align center
-  padding 10px 40px 0 40px
-  line-height 1.5
+  justify-content center
+  padding 20px 40px 20px 40px
+  line-height 1
   futura()
   font-size 24px
   color offGray()
+  display flex
+  flex 1 80px
+  min-height 80px
+  max-height 80px
+  align-items center
+  position relative
+.inlineForm
+  position absolute
+  top 0
+  left 0
+  min-height inherit
+  max-height inherit
+  width 100%
+  &[data-state="hidden"]
+    opacity 0
+    transform scale3d(0,0,0)
+.inlineFormInputWrapper
+  min-height inherit
+  max-height inherit
+.inlineFormInput
+  font-family inherit
+  font-weight inherit
+  font-size inherit
+  text-transform inherit
+  color inherit
+  background transparent
+  min-height inherit
+  max-height inherit
+  width 100%
+.inlineFormSubmit
+  opacity 0
+  pointer-events none
+  height 0
+  width 0
+  margin 0
+  padding 0
+
+//Browsea
+.browse
+  background white()
+  display flex
+  justify-content center
+  align-content center
+  //align-items center
+  //flex-flow row wrap
+  flex-direction column
+  flex 1
+  z-index 1
 .tiles
-  width 940px
-  //height 2000px
-  margin 0 auto
-  padding-right 5px
-  padding-left 5px
+  display flex
+  flex-flow row wrap
+  justify-content center
+  //align-content center
+  align-items center
+  //flex 1 100%
 .tile
-  width 300px
-  height 210px
-  float left
-  margin-top 10px
-  margin-right 5px
-  margin-left 5px
+  //width 300px
+  //height 210px
+  //float left
+  margin-right 20px
+  margin-bottom 50px
+  margin-left 20px
   cursor pointer
+  //position relative
+  flex 1 0 300px
+  max-width 300px
+
   .preview
-    width 300px
+    //width 300px
     height 169px
-    background midnight()
+    background-color midnight()
+    background-size cover
     border-radius 4px
   .title
+    justify-content flex-start
     font-size 14px
     padding 0
-    line-height 20px
+    min-height 30px
+    max-height 30px
     text-align left
   .subtitle
     font-size 12px
@@ -184,35 +191,46 @@ body
     line-height 14px
     color offerGray()
 
-.toggle
-  size(16,16)
-  border-radius 16px
-  position absolute
-  top 17px
-  z-index 3
-  background midnight()
-  cursor pointer
-  &.left
-    left 10px
-  &.right
-    right 10px
-.scroller
-  position absolute
-  top 0
-  bottom 0
-  width 100%
-  overflow-x hidden
-  overflow-y auto
 
 .player
   position absolute
   top 0
   right 0
+  bottom 0
   left 0
+  overflow hidden
+  background black
+  .logo
+    width 100px
+    height 100px
+    position absolute
+    top 50%
+    left 50%
+    margin-top -50px
+    margin-left -50px
+    opacity 0.2
+.videoWrapper
+  position relative
+  overflow hidden
+  background black
 .video
   width 100%
   background black
   z-index 2
+  background-size contain
+  background-repeat no-repeat
+.banner
+.cover
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  background-size contain
+  background-repeat no-repeat
+  &.contentCover
+    background-size cover
+    background-position 50% 50%
 .play
   size(60,60)
   border-radius 120px
@@ -225,40 +243,202 @@ body
   margin -30px auto 0 auto
   cursor pointer
 
-//Browse
-.browse
-  background white()
-  position relative
+//Cover
+.cover
+  display flex
+  align-items center
+  justify-content center
   z-index 1
+  transform scale3d(0,0,0)
+  transition opacity 300ms ease-in-out, transform 300ms ease-in-out
+  pointer-events none
+  text-align center
+  &[data-state="active"]
+    opacity 1
+    transform scale3d(1,1,1)
+    pointer-events auto
+.coverContent
+  width 300px
+  position relative
+  //display flex
+  //justify-content center
+  //align-items center
+  .serverMessage
+    position relative
+    top -5px
+    position absolute
+    top 60px
+    right 0
+    left 0
+    opacity 0
+    transform scale3d(0,0,0)
+    transition opacity 300ms ease-in-out, transform 300ms ease-in-out
+    &[data-state="active"]
+      opacity 1
+      transform scale3d(1,1,1)
+  .coverMessage
+    position absolute
+    top 50%
+    right 0
+    left 0
+    //margin-top -70px
+    //height 140px
+    margin-top -55px
+    height 110px
+    opacity 0
+    transform scale3d(0,0,0)
+    transition opacity 300ms ease-in-out, transform 300ms ease-in-out
+    &[data-state="active"]
+      opacity 1
+      transform scale3d(1,1,1)
+    .serverMessage
+      position absolute
+      right 0
+      bottom 0
+      left 0
+    .title
+      padding 0
+      min-height 40px
+      max-height 40px
+      margin-top 20px
+    .coverMessageIcon
+      width 80px
+      height 80px
+      position relative
+      margin 0 auto
+      .iconFill
+        fill midnight(0.85)
+  .coverInfoWrapper
+    position absolute
+    top 50%
+    left 50%
+    transform translate3d(-50%,-50%,0) //Vertically center elements that have dynamic heights
+    pointer-events none
+  .coverInfo
+    position relative
+    opacity 0
+    transform scale3d(0,0,0)
+    pointer-events none
+    transition opacity 300ms ease-in-out, transform 300ms ease-in-out
+    &[data-state="active"]
+      opacity 1
+      transform scale3d(1,1,1)
+      pointer-events auto
+  .coverForm
+    width 240px
+    margin 0 auto
+    .coverFormInputWrapper
+      margin-top -10px
+      transition transform 300ms ease-in-out
+      &:first-of-type
+        margin-top 0
+      &.first[data-state="error"]
+        & + .second[data-state="error"]
+          transform translate3d(0,20px,0)
+          & + .third
+            transform translate3d(0,40px,0)
+        & + .second
+          transform translate3d(0,20px,0)
+          & + .third
+            transform translate3d(0,20px,0)
+      &.second[data-state="error"]
+        & + .third
+          transform translate3d(0,20px,0)
+    .coverFormInput
+      width 100%
+      height 40px
+      padding 10px 20px 10px 20px
+      background midnight(0.85)
+      color white(0.9)
+      border-radius 40px
+      font-size 14px
+    .coverFormInput::-webkit-input-placeholder
+      color white(0.5)
+    .coverFormMessage
+      height 20px
+      line-height 24px
+      font-size 12px
+      opacity 0
+      transform scale3d(0,0,0)
+      transition opacity 300ms ease-in-out, transform 300ms ease-in-out
+      &[data-state="active"]
+        opacity 1
+        transform scale3d(1,1,1)
+    .coverFormSubmit
+      opacity 0
+      pointer-events none
+      height 0
+      width 0
+      margin 0
+      padding 0
 
 //About
-.about
-  border-top 1px solid offWhite()
-  background white()
+.contentAbout
+.profileAbout
+  //border-top 1px solid offWhite()
+  //background white()
+  //background red
   width 100%
+  height 100%
   //height 10000px
   position relative
   margin-top 50%
   z-index 3
   transition margin-top 300ms ease-in-out
-  padding-top 20px
-  padding-right 40px
-  padding-bottom 20px
-  padding-left 40px
   color midnight(0.8)
   .title
-    text-align left
+    justify-content flex-start
     padding 0
+    max-width 600px
+    margin 0 auto
   .author
-    futura()
-    font-size 14px
-    text-transform uppercase
-    text-align left
-    color midnight(0.40)
+    max-width 600px
+    margin 0 auto
   .description
-    padding-top 10px
-    font-size 16px
-    color midnight(0.80)
+    max-width 600px
+    margin 0 auto
+
+.pane
+  margin-top 200px
+  padding-top 20px
+  padding-right 40px
+  padding-bottom 100px
+  padding-left 40px
+  background white()
+  &:first-of-type
+    margin-top 0
+.profileAbout
+  display flex
+  justify-content center
+  align-content center
+  //align-items center
+  //flex-flow row wrap
+  flex-direction column
+  flex 1
+  z-index 1
+  .browse
+    .title
+      justify-content center
+    .tiles
+      .title
+        justify-content flex-start
+.creations
+  margin-top 100px
+  background white()
+  flex 1 100%
+.author
+  futura()
+  font-size 14px
+  text-transform uppercase
+  text-align left
+  color midnight(0.40)
+.description
+  padding-top 10px
+  font-size 16px
+  color midnight(0.80)
+
+.slider
+  transition transform 300ms ease-in-out
 
 //Community
 .community
@@ -291,8 +471,8 @@ body
     //border-bottom 1px solid offWhite()
     color midnight(0.80)
     position relative
-    opacity 1
-    transition opacity 300ms ease-in-out
+    //opacity 1
+    //transition opacity 300ms ease-in-out
     &:last-child
       border-bottom 0
     &:last-of-type
@@ -303,12 +483,19 @@ body
       border-radius 40px
       position absolute
       margin-top 10px
+      background-size cover
+      background-position 50% 50%
     .title
-      text-align left
+      justify-content flex-start
       text-transform none
+      padding-top 10px
       padding-right 10px
+      padding-bottom 10px
       padding-left 0
       color midnight(0.85)
+      min-height 50px
+      max-height 50px
+      align-items flex-end
     .author
       futura()
       font-size 12px
@@ -319,6 +506,7 @@ body
       line-height 1.5
       margin-top 10px
     .description
+      padding-top 0
       padding-left 50px
       font-size 16px
 .topics
@@ -341,7 +529,8 @@ body
       .title
         color midnight(0.85)
       .avatar
-        background midnight(0.85)
+        background-color midnight(0.85)
+        opacity 0.85
       .author
         color midnight(0.4)
       .description
@@ -350,14 +539,19 @@ body
       font-size 16px
       color midnight(0.4)
       text-transform none
-      text-align left
+      justify-content flex-start
       padding 0
       line-height 1.5
       margin-bottom 10px
+      min-height 20px
+      max-height 20px
     .avatar
       size(40,40)
       border-radius 40px
-      background midnight(0.4)
+      background-color midnight(0.4)
+      opacity 0.4
+      background-size cover
+      background-position 50% 50%
       position absolute
     .author
       futura()
@@ -368,60 +562,24 @@ body
       padding-left 50px
       margin-bottom 5px
     .description
+      padding-top 0
       padding-left 50px
       color midnight(0.5)
 
-//Tiles Media Queries -> No Sidebars Open
-//One Column
-@media all and (min-width: 320px) and (max-width: 630px)
-  .tiles
-    //background blue
-    width 320px
-//Two Column
-@media all and (min-width: 630px) and (max-width: 940px)
-  .tiles
-    //background red
-    width 630px
-//Three Column
-@media all and (min-width: 940px) and (max-width: 1250px)
-  .tiles
-    //background green
-    width 940px
-//Four Column
-@media all and (min-width: 1250px) and (max-width: 1560px)
-  .tiles
-    //background pink
-    width 1250px
-//Five Column
-@media all and (min-width: 1560px) and (max-width: 1870px)
-  .tiles
-    //background purple
-    width 1560px
-//Six Column
-@media all and (min-width: 1870px) and (max-width: 2180px)
-  .tiles
-    //background yellow
-    width 1870px
-//Seven Column
-@media all and (min-width: 2180px) and (max-width: 2490px)
-  .tiles
-    //background orange
-    width 2180px
-//Eight Column
-@media all and (min-width: 2490px) and (max-width: 2800px)
-  .tiles
-    //background brown
-    width 2490px
-//Nine Column
-@media all and (min-width: 2800px) and (max-width: 3110px)
-  .tiles
-    //background aqua
-    width 2800px
-//Ten Column
-@media all and (min-width: 3110px) and (max-width: 3420px)
-  .tiles
-    //background lime
-    width 3110px
+//Editor
+.editor
+  background red
+  p
+    margin-top 10px
+    margin-bottom 10px
+  br
+    height 40px
+    background blue
+  .editorContent
+    width 100%
+    height 728px
+    background-color green
+    background-size cover
 
 //Click Menu
 .clickMenu
@@ -440,20 +598,19 @@ body
     right 0
     bottom 0
     left 0
-    //border-radius 40px
-    //border 2px solid midnight()
-    //background transparent
     z-index 99
     transition opacity 100ms ease-out, transform 100ms ease-out
     opacity 0
     transform translate3d(0,0,0)
     cursor pointer
+    .node
+      opacity 0
     &.origin
       transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
       pointer-events none
       .dot
         transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
-        .inner
+        .dotInner
           size(40,40)
           border-radius 40px
           background midnight(0.9)
@@ -464,6 +621,17 @@ body
           transition transform 400ms ease-out
           transform-origin 50% 50%
           transform scale3d(0.2,0.2,0.2)
+    &.inner
+      .dot
+        &:after
+          content ""
+          position absolute
+          right 0
+          bottom -12px
+          left 0
+          //background red
+          height 12px
+          width 100%
     .dot
       size(40,40)
       border-radius 40px
@@ -476,17 +644,18 @@ body
       left 0
       transition opacity 100ms ease-out 100ms, transform 100ms ease-out 100ms
       transform scale3d(0,0,0)
-      .inner
+      .dotInner
         size(32,32)
         margin 2px
         background midnight(0.9)
-        transition width 100ms ease-out
+        transition width 100ms ease-out, height 100ms ease-out, border-radius 100ms ease-out
         overflow hidden
         //futura()
         //line-height 38px
         //font-size 24px
         border-radius 40px
         //color midnight(0.8)
+        padding-right 20px
         position absolute
         .iconWrapper
           position absolute
@@ -494,6 +663,7 @@ body
           .icon
             padding 8px
         .title
+          display block
           font-size 14px
           height 32px
           line-height 33px
@@ -503,70 +673,13 @@ body
           transition opacity 100ms ease-out
           opacity 0
           text-align left
+          position absolute
   &.activated
     pointer-events auto
     cursor pointer
-    .node
+    & > .node
       opacity 1
       transition opacity 100ms ease-out 400ms, transform 100ms ease-out 400ms
-      &.hovered
-        z-index 999
-        &[data-action="fund"]
-          .dot
-            width 92px
-            .inner
-              width 84px
-              .title
-                opacity 1
-        &[data-action="browse"]
-          .dot
-            width 114px
-            .inner
-              width 106px
-              .title
-                opacity 1
-        &[data-action="play"]
-          .dot
-            width 90px
-            .inner
-              width 82px
-              .title
-                opacity 1
-        &[data-action="create"]
-          .dot
-            width 106px
-            .inner
-              width 98px
-              .title
-                opacity 1
-        &[data-action="addMedia"]
-          .dot
-            width 132px
-            .inner
-              width 124px
-              .title
-                opacity 1
-        &[data-action="addPoll"]
-          .dot
-            width 122px
-            .inner
-              width 114px
-              .title
-                opacity 1
-        &[data-action="edit"]
-          .dot
-            width 86px
-            .inner
-              width 78px
-              .title
-                opacity 1
-        &[data-action="follow"]
-          .dot
-            width 112px
-            .inner
-              width 104px
-              .title
-                opacity 1
       &.origin
         transition opacity 100ms ease-out, transform 100ms ease-out
         .dot
@@ -596,10 +709,103 @@ body
         transform translate3d(-80px,0,0)
         //transition opacity 100ms ease-out 900ms, transform 100ms ease-out 900ms
       &.origin
-        .inner
+        .dotInner
           transform scale3d(1,1,1)
+      &.hovered
+        &[data-action="browse"]
+          .dot
+            width 120px
+            .dotInner
+              width 112px
+        &[data-action="account"]
+          .dot
+            width 130px
+            .dotInner
+              width 122px
+        &[data-action="signup"]
+          .dot
+            width 110px
+            .dotInner
+              width 102px
+        &[data-action="login"]
+          .dot
+            width 110px
+            .dotInner
+              width 102px
+        &[data-action="create"]
+          .dot
+            width 144px
+            .dotInner
+              width 136px
+        &[data-action="contentAbout"]
+          .dot
+            width 108px
+            .dotInner
+              width 100px
+        &[data-action="contentCommunity"]
+          .dot
+            width 148px
+            .dotInner
+              width 140px
+        &[data-action="profileAbout"]
+          .dot
+            width 178px
+            .dotInner
+              width 170px
+        &[data-action="profileCommunity"]
+          .dot
+            width 148px
+            .dotInner
+              width 140px
+        &[data-action="play"]
+          .dot
+            width 98px
+            .dotInner
+              width 90px
+        &[data-action="fund"]
+          .dot
+            width 98px
+            .dotInner
+              width 90px
+        &[data-action="follow"]
+          .dot
+            width 118px
+            .dotInner
+              width 110px
+        .title
+          opacity 1
+        .node
+          opacity 1
+          transform scale3d(1.1,1.1,1.1)
+          &.top
+            &.first
+              transform translate3d(0,-50px,0)
+            //transition opacity 100ms ease-out 400ms, transform 100ms ease-out 400ms
+            &.second
+              transform translate3d(0,-100px,0)
+          &.right
+            transform translate3d(80px,0,0)
+            //transition opacity 100ms ease-out 700ms, transform 100ms ease-out 700ms
+          &.bottom
+            transform translate3d(0,80px,0)
+            //transition opacity 100ms ease-out 800ms, transform 100ms ease-out 800ms
+            &.right
+              transform translate3d(60px,60px,0)
+              //transition opacity 100ms ease-out 750ms, transform 100ms ease-out 750ms
+            &.left
+              transform translate3d(-60px,60px,0)
+              //transition opacity 100ms ease-out 850ms, transform 100ms ease-out 850ms
+          &.left
+            transform translate3d(-80px,0,0)
+            //transition opacity 100ms ease-out 900ms, transform 100ms ease-out 900ms
+          //Text specific styles (We do this because we can't animate width)
+          /*&.hovered
+            .dotInner
+              background blue*/
+
+          //opacity 1
       .dot
-        transition transform 100ms ease-out, width 100ms ease-out
+        transition transform 100ms ease-out, width 100ms ease-out, height 100ms ease-out, border-radius 100ms ease-out
         transform scale3d(1,1,1)
 
 //Icons
@@ -609,5 +815,14 @@ body
   right 0
   width 100%
   height 100%
+  overflow visible
   .iconFill
     fill white()
+
+//Clapper Icon Styles
+.clapper
+  transform-origin bottom left
+  transition transform 300ms ease-in-out
+  transform rotateZ(-20deg)
+  &[data-state="closed"]
+    transform rotateZ(0deg)
