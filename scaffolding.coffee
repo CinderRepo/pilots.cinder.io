@@ -100,6 +100,36 @@ UI.registerHelper "clapperState", (context,value) ->
   Session.get "clapperState"
 UI.registerHelper "loaded", (context,value) ->
   Session.get "loaded"
+#UI.registerHelper "isEditable", (context,value) ->
+#  console.log "context",context
+#  console.log "this",this
+#  Template.topic this
+#  #if this.isEditable is "true"
+#  #  true
+#  #else
+#  #  this
+UI.registerHelper "isEditable", (context,value) ->
+  #console.log "isowner"
+  #console.log "keyword args this",this
+  #console.log "context",context
+  #console.log "value",value
+  #console.log "arguments",arguments
+  #Is the passed in context the same as the currently logged in user?
+  if context is Meteor.userId()
+    true
+  else
+    false
+#UI.registerHelper "editable", (context,value) ->
+#  #console.log "editable",this
+#  #console.log "context",context
+#  #this.editable = true
+#  true
+#UI.registerHelper "editableTopic", (context,value) ->
+#  console.log "this",this
+#  console.log "context",context
+#  console.log "value",value
+#  this
+#  #true
 
 #Global Data Collections and Helpers
 @Projects = new Meteor.Collection "projects"
@@ -355,6 +385,7 @@ if Meteor.isClient
   Session.setDefault "editing",false
   Session.setDefault "property",null
   Session.setDefault "focused",null
+  #Session.setDefault "editableBody",null
 
   #Allow for fastclick on mobile devices
   window.addEventListener "load", (->
@@ -378,6 +409,21 @@ if Meteor.isClient
         topic:topic._id###
 
   Template.topic.helpers
+    #isEditable: () ->
+    #  #console.log "TOPIC"
+    #  console.log "TOPIC This",this
+    #  if this.isEditable is "true"
+    #    true
+      #console.log "arguments",arguments
+    #  if arguments[0] is true
+    #    console.log "true!"
+    #    true
+    #  else
+    #    false
+    #editable: () ->
+      #console.log "EDITABLE STUFF"
+      #console.log "this",this
+      #console.log "arguments",arguments
     topicComments: () ->
       Comments.find
         parent: this._id
@@ -395,27 +441,73 @@ if Meteor.isClient
   #      #disableDoubleReturn: true
   #    )
 
-  Template.topic.rendered = () ->
+  Template.editableTopic.rendered = () ->
     editor = this.$(".editor")[0]
-    this._editor =
-      new MediumEditor(
-        editor
-      ,
-        disableToolbar:true
-        disableDoubleReturn:true
-      )
-    #this._editor =
-    #  new Medium
-    #    element: editor
-    #    mode: "rich"
-    #    #autoHR: true
+    #console.log "topic this",this
+    if editor
+      this._editor =
+        new MediumEditor(
+          editor
+        ,
+          disableToolbar:true
+          disableDoubleReturn:true
+          #placeholder:this.data.body
+        )
+      $(editor).html(this.data.body)
 
-  #$(".editor").on("input",()->
-  #  console.log "SANELY EDITING!"
-  #)
 
-  #Events
-  Template.layout.events
+  #Template.profileCommunity.helpers
+  ###Template.topic.helpers
+    isEditable: (value) ->
+      (value % 2) is 0
+    editableBody: () ->
+      #console.log "editableContent"
+      self = this
+      console.log "this",this
+      if self.owner is Meteor.userId()
+        #Set up an observer to track changes to document
+        #topic = Topics.find(self._id)
+        #observer =
+        #  topic.observeChanges(
+        #    changed: (id, fields) ->
+        #      console.log "CURSOR CHANGED!!!"
+        #      console.log "id",id
+        #      console.log "fields",fields
+        #  )
+        #console.log "OWNER OF DOCUMENT"
+        #console.log "Deps",Deps.currentComputation
+        #Deps.currentComputation.stop()
+        #console.log "invalidated",Deps.Computation.invalidated
+        #if Deps.Computation.invalidated is true
+        #  console.log "FUCKKKKKKKKKK!!!!!!!!!1111"
+        #Deps.currentComputation.onInvalidate(()->
+        #  console.log "INVALIDATED!!"
+        #  false
+        #)
+        #Is there no Session? If so draw from the body
+        #if Session.equals "editableBody",null
+        #  console.log "noEditableBody"
+        #else
+        #editableBody exists, invalidate context so we don't get funky stuff
+        #Set up a non-reactive layout for this one context
+        #if Deps.Computation.firstRun is true
+        #  console.log "FIRST TIME BEING RUN!"
+        #else
+        #  console.log "SECOND TIME"
+        #UI.renderWithData(Template.topic,self.body)
+        #Deps.nonreactive(()->
+        #  console.log "Making thing nonreactive"
+          #No editable body yet
+          #Session.set "editableBody",self.body
+          #Session.get "editableBody"
+          #topic = Topics.findOne(self._id,reactive:false).body
+          #console.log "topic",topic
+          #topic.body
+        #)
+      else
+        self.body###
+
+  Template.editableTopic.events
     "input .editor":(e,t)->
       #Stop the event from bubbling
       e.preventDefault()
@@ -423,11 +515,23 @@ if Meteor.isClient
       #console.log "Input!!!!!"
       #console.log "this",this
       self = this
+      console.log "self",self
+      #console.log "t",t
       currentTarget = $(e.currentTarget)
       #console.log "currentTarget",currentTarget
       html = currentTarget.html()
       #console.log "html",html
-      #Check for if it's a topic or a comment, and update accordingly.
+      #value = currentTarget.value()
+      #console.log "value",value
+      #console.log "self",self
+      #console.log "t",t
+      #Serialize the editor content
+      #console.log "t._editor",t._editor
+      editor = t._editor
+      serialized = editor.serialize()
+      #Session.set "editableBody",html
+      #console.log "serialized:",serialized
+      #console.log "value:",serialized["element-0"].value
       if self.topic
         #It's a comment, update the comment.
         Comments.update(
@@ -445,6 +549,7 @@ if Meteor.isClient
       else
         #It's a top level topic, update the topic.
         console.log "Top Level!"
+        console.log "self._id",self._id
         Topics.update(
           self._id
         ,
@@ -457,6 +562,12 @@ if Meteor.isClient
             else
               console.log "result",result
         )
+      #Set the html to the body element
+      #console.log "updated body",self.body
+      #html(self.body)
+
+  #Events
+  Template.layout.events
     "mousedown":(e,t)->
       #alert "MOUSEDOWN"
       #console.log "FUCKING MOUSEDOWN"
@@ -493,8 +604,8 @@ if Meteor.isClient
       if currentTarget.prop("tagName") is "P"
         console.log "P!"
         console.log "currentTarget",currentTarget[0]
-        currentTarget.attr("data-editorContextId",Meteor.uuid())
-        Session.set "editorContext",currentTarget.attr("data-editorContextId")
+        #currentTarget.attr("data-editorContextId",Meteor.uuid())
+        #Session.set "editorContext",currentTarget.attr("data-editorContextId")
 
 
       #console.log "starting check!"
@@ -794,13 +905,13 @@ if Meteor.isClient
         editorContext = Session.get "editorContext"
         #console.log "editorContext",editorContext
         #Get the current editor Context element based on the session
-        editorContextElem = $("[data-editorcontextid=#{editorContext}]")
-        console.log "editorContextElem:",editorContextElem
+        #editorContextElem = $("[data-editorcontextid=#{editorContext}]")
+        #console.log "editorContextElem:",editorContextElem
         #Insert a DOM node after the editorContextElem
-        editorContextElem.after("<div class='editorContent' style='background-image:url(http://i.imgur.com/Sjh1csr.png?1);'></div>")
+        #editorContextElem.after("<div class='editorContent' style='background-image:url(http://i.imgur.com/Sjh1csr.png?1);'></div>")
         #Find the just inserted editorContent
-        editorContent = editorContextElem.next(".editorContent")
-        console.log "editorContent",editorContent
+        #editorContent = editorContextElem.next(".editorContent")
+        #console.log "editorContent",editorContent
         #So that the user can have a paragraph to jump to, add an empty paragraph after the editorContent.
         #editorContent.after("<p></p>")
       if action is "addReply"

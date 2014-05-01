@@ -569,7 +569,10 @@ template(name="profileCommunity")
     .currentTopic
       with currentTopic
         .section(data-state=focused)= username
-        +topic
+        if isEditable owner
+          +editableTopic
+        else
+          +topic
       each childTopics
         +topic
 
@@ -577,20 +580,47 @@ template(name="profileCommunity")
       each topics
         +topic
 
+//-template(name="topic")
+  .topic
+    h1 Hello
+    //-if isEditable value
+      h1 HELLO
+      h2 {{title}}
+      //-+UI.contentBlock
+      .description.editor.clickable(data-menu="topic")
+        {{{body}}}
+    //-else
+      .description.clickable(data-menu="topic")
+        {{{body}}}
+
 template(name="topic")
   .topic(data-state="{{focused _id}}")
     if title
       .title= title
     .avatar(style="background-image:url('andrew.png');")
     .author= subtitle
-    .description.editor.clickable(data-menu="topic")
-      //-= content
+    .description.clickable(data-menu="topic")
       {{{body}}}
+
+    //-.description.editor.clickable(data-menu="topic")
+      {{{editableBody}}}
+      //-= body
+      //-= content
+      //-= body
       //-= content
       //-+editor
   each topicComments
     with this
       +topic
+
+template(name="editableTopic")
+  .topic(data-state="{{focused _id}}")
+    if title
+      .title= title
+    .avatar(style="background-image:url('andrew.png');")
+    .author= subtitle
+    .description.editor.clickable(data-menu="topic")
+      {{{body}}}
 
 //-template(name="editor")
   .editor(data-state="{{focused _id}}",data-menu="addMedia")
