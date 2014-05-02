@@ -111,6 +111,13 @@ UI.registerHelper "isEditable", (context,value) ->
     true
   else
     false
+UI.registerHelper "position", (context,value) ->
+  console.log "Position!",context
+  if context
+    #Multiply the array length by 40 (the margin we want) to return that to the CSS
+    context.length * 40
+  else
+    0
 
 #Global Data Collections and Helpers
 @Projects = new Meteor.Collection "projects"
@@ -383,13 +390,11 @@ if Meteor.isClient
 
   Template.topic.helpers
     topicComments: () ->
-      console.log "TOPIC COMMENTS HELPER!!!! THIS",this
       Comments.find
         parent: this._id
 
   Template.editableTopic.helpers
     editableTopicComments: () ->
-      console.log "TOPIC COMMENTS HELPER!!!! THIS",this
       Comments.find
         parent: this._id
 
@@ -834,40 +839,52 @@ if Meteor.isClient
         user = Meteor.user()
         #Get the currently focusedTopic, and let's figure out what we want to do from there,
         #Because we want to have access to the data model, which we currently don't have.
-        #data = Comments.findOne(focusedTopic)
-        #console.log "data",data
+        data = Comments.findOne(focusedTopic)
+        console.log "data",data
         #If the focusedTopic is the same as the params topic, we must be clicking on the parent topic,
         #and as such would want to create a top level comment for people to interact with.
-        if focusedTopic is params["topic"]
-          #Create a top level comment
-          Comments.insert
-            topic: params["topic"]
-            owner: user._id
-            subtitle: user.username
-            body: "SOMETHING SOMETHING COMMENT"
-          , (err, result) ->
+        if user
+          if focusedTopic is params["topic"]
+            #Create a top level comment
+            Comments.insert
+              topic: params["topic"]
+              owner: user._id
+              subtitle: user.username
+              body: "SOMETHING SOMETHING COMMENT"
+            , (err, result) ->
+                console.log "Insert callback!"
+                if err
+                  console.log "err: ",err
+                else
+                  console.log "Insert succeeded!"
+                  console.log "result: ",result
+          #Otherwise, it must be a nested comment, and so we just need to use the focusedTopic's ID
+          #and insert it in as a comment.
+          else
+            ancestors = data.ancestors
+            console.log "ancestors",ancestors
+            if ancestors is undefined
+              console.log "No ancestors yet! Create and push."
+              ancestors = []
+              ancestors.push focusedTopic
+            else
+              console.log "Ancestors exist! Let's access that bad boy.."
+              console.log "data.ancestors",data.ancestors
+              ancestors.push focusedTopic
+            Comments.insert
+              topic: params["topic"]
+              owner: user._id
+              parent: focusedTopic
+              ancestors: ancestors
+              subtitle: user.username
+              body: "SOMETHING SOMETHING CHILD CHILD COMMENT YAY WHOOOO"
+            , (err, result) ->
               console.log "Insert callback!"
               if err
                 console.log "err: ",err
               else
                 console.log "Insert succeeded!"
-                console.log "result: ",result
-        #Otherwise, it must be a nested comment, and so we just need to use the focusedTopic's ID
-        #and insert it in as a comment.
-        else
-          Comments.insert
-            topic: params["topic"]
-            owner: user._id
-            parent: focusedTopic
-            subtitle: user.username
-            body: "SOMETHING SOMETHING CHILD CHILD COMMENT YAY WHOOOO"
-          , (err, result) ->
-            console.log "Insert callback!"
-            if err
-              console.log "err: ",err
-            else
-              console.log "Insert succeeded!"
-              console.log "result:",result
+                console.log "result:",result
 
     "mouseup":(e,t)->
       #console.log "mouseup"

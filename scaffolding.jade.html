@@ -597,7 +597,7 @@ template(name="profileCommunity")
         {{{body}}}
 
 template(name="topic")
-  .topic.clickable(data-state="{{focused _id}}",data-menu="topic")
+  .topic.clickable(data-state="{{focused _id}}",data-menu="topic",style="margin-left:{{position ancestors}}px")
     if title
       .title= title
     .avatar(style="background-image:url('andrew.png');")
@@ -612,7 +612,7 @@ template(name="topic")
         +topic
 
 template(name="editableTopic")
-  .topic.clickable(data-state="{{focused _id}}",data-menu="topic")
+  .topic.clickable(data-state="{{focused _id}}",data-menu="topic",style="margin-left:{{position ancestors}}px")
     if title
       .title= title
     .avatar(style="background-image:url('andrew.png');")
