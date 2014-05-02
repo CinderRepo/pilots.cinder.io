@@ -458,7 +458,7 @@ body
     top 15px
 .currentTopic
   height 100%
-  width 70%
+  width 60%
   overflow-x hidden
   overflow-y auto
   float left
@@ -471,6 +471,7 @@ body
     //border-bottom 1px solid offWhite()
     color midnight(0.80)
     position relative
+    overflow hidden
     //background purple
     //opacity 1
     //transition opacity 300ms ease-in-out
@@ -492,6 +493,11 @@ body
       .editor
         &:hover,&:focus
           color white()
+    .bounds
+      width 100%
+      max-width 840px
+      float right
+      //position relative
     .avatar
       background midnight(0.85)
       size(40,40)
@@ -512,6 +518,8 @@ body
       max-height 50px
       align-items flex-end
       text-align left
+      background transparent
+      width 100%
     .author
       futura()
       font-size 12px
@@ -535,7 +543,7 @@ body
           margin-bottom 0
 .topics
   height 100%
-  width 30%
+  width 40%
   overflow-x hidden
   overflow-y auto
   float left
@@ -545,6 +553,7 @@ body
   z-index 1
   .topic
     width 100%
+    max-width 420px
     height auto
     cursor pointer
     margin-bottom 30px
@@ -553,7 +562,6 @@ body
       .title
         color midnight(0.85)
       .avatar
-        background-color midnight(0.85)
         opacity 0.85
       .author
         color midnight(0.4)
@@ -570,14 +578,16 @@ body
       min-height 20px
       max-height 20px
       text-align left
+      transition color 300ms ease-in-out
     .avatar
       size(40,40)
       border-radius 40px
-      background-color midnight(0.4)
+      background-color midnight()
       opacity 0.4
       background-size cover
       background-position 50% 50%
       position absolute
+      transition opacity 300ms ease-in-out
     .author
       futura()
       font-size 10px
@@ -586,10 +596,12 @@ body
       color midnight(0.25)
       padding-left 50px
       margin-bottom 5px
+      transition color 300ms ease-in-out
     .description
       padding-top 0
       padding-left 50px
       color midnight(0.5)
+      transition color 300ms ease-in-out
 
 //Editor
 .editor

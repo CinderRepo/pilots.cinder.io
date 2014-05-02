@@ -112,7 +112,7 @@ UI.registerHelper "isEditable", (context,value) ->
   else
     false
 UI.registerHelper "position", (context,value) ->
-  console.log "Position!",context
+  #console.log "Position!",context
   if context
     #Multiply the array length by 40 (the margin we want) to return that to the CSS
     context.length * 40
@@ -213,7 +213,7 @@ Router.map ->
       currentProfile: user
       currentTopic: Topics.findOne(params.topic)
       childTopics: Comments.find(topic:params.topic,parent:null)
-      topics: Topics.find(owner:params.owner)
+      topics: Topics.find(context:params.owner)
 
 #Form Validations (Client and Server)
 #Specifiy the valid formats for data submitted from the signup form.
@@ -285,67 +285,13 @@ Schema.loginFormSchema.messages
   regEx: "Whoa there buddy! Your [label] doesn't look right!"
 
 #Specifiy the valid formats for data submitted from the title form.
-Schema.usernameFormSchema = new SimpleSchema
-  username:
+Schema.topicTitleFormSchema = new SimpleSchema
+  title:
     type: String
     optional: false
 
 #Customize output messages sent to the user when an error is come across.
-Schema.usernameFormSchema.messages
-  required: "[label] is required!"
-  minString: "[label] must be at least [min] characters!"
-  maxString: "[label] cannot exceed [max] characters!"
-  minNumber: "[label] must be at least [min]!"
-  maxNumber: "[label] cannot exceed [max]!"
-  minDate: "[label] must be on or before [min]!"
-  maxDate: "[label] cannot be after [max]!"
-  minCount: "You must specify at least [minCount] values!"
-  maxCount: "You cannot specify more than [maxCount] values!"
-  noDecimal: "[label] must be an integer!"
-  notAllowed: "[value] is not an allowed value!"
-  expectedString: "[label] must be a string!"
-  expectedNumber: "[label] must be a number!"
-  expectedBoolean: "[label] must be a boolean!"
-  expectedArray: "[label] must be an array!"
-  expectedObject: "[label] must be an object!"
-  expectedConstructor: "[label] must be a [type]!"
-  regEx: "Whoa there buddy! Your [label] doesn't look right!"
-
-#Specifiy the valid formats for data submitted from the title form.
-Schema.roleFormSchema = new SimpleSchema
-  "profile.role":
-    type: String
-    optional: false
-
-#Customize output messages sent to the user when an error is come across.
-Schema.roleFormSchema.messages
-  required: "[label] is required!"
-  minString: "[label] must be at least [min] characters!"
-  maxString: "[label] cannot exceed [max] characters!"
-  minNumber: "[label] must be at least [min]!"
-  maxNumber: "[label] cannot exceed [max]!"
-  minDate: "[label] must be on or before [min]!"
-  maxDate: "[label] cannot be after [max]!"
-  minCount: "You must specify at least [minCount] values!"
-  maxCount: "You cannot specify more than [maxCount] values!"
-  noDecimal: "[label] must be an integer!"
-  notAllowed: "[value] is not an allowed value!"
-  expectedString: "[label] must be a string!"
-  expectedNumber: "[label] must be a number!"
-  expectedBoolean: "[label] must be a boolean!"
-  expectedArray: "[label] must be an array!"
-  expectedObject: "[label] must be an object!"
-  expectedConstructor: "[label] must be a [type]!"
-  regEx: "Whoa there buddy! Your [label] doesn't look right!"
-
-#Specifiy the valid formats for data submitted from the title form.
-Schema.bioFormSchema = new SimpleSchema
-  "profile.bio":
-    type: String
-    optional: false
-
-#Customize output messages sent to the user when an error is come across.
-Schema.bioFormSchema.messages
+Schema.topicTitleFormSchema.messages
   required: "[label] is required!"
   minString: "[label] must be at least [min] characters!"
   maxString: "[label] cannot exceed [max] characters!"
@@ -380,6 +326,103 @@ if Meteor.isClient
     return
   ), false
 
+  #AutoForm Settings
+  AutoForm.setDefaultTemplate("plain")
+
+  #Set up AutoForm Hooks
+  AutoForm.hooks
+    signupForm:
+      onSubmit: (insertDoc,updateDoc,currentDoc) ->
+        check(insertDoc,Schema.signupFormSchema)
+        self = this
+        console.log "signupForm validating!"
+        console.log "insertDoc:",insertDoc
+        console.log "updateDoc:",updateDoc
+        console.log "currentDoc:",currentDoc
+        Session.set "clapperState","open"
+        Session.set "coverState","message"
+        Accounts.createUser(
+          insertDoc
+        ,
+          (err)->
+            if err
+              console.log "err: ",err
+              Session.set "serverError",err.reason
+              self.resetForm()
+              Meteor.setTimeout(->
+                Session.set "coverState","signup"
+              1000)
+            else
+              console.log "Successfully signed up!"
+              #Reset the form for future logins, and clear the serverError messages, if there are any
+              self.resetForm()
+              Session.set "serverError",undefined
+              #If login or signup is successful, close the clapper, and hide the cover
+              Meteor.setTimeout(->
+                Session.set "clapperState","closed"
+                #Close the cover
+                Meteor.setTimeout(->
+                  Session.set "hidden",false
+                  #Session.set "clapperState","open"
+                500)
+              1000)
+        )
+        false
+    loginForm:
+      onSubmit: (insertDoc,updateDoc,currentDoc) ->
+        check(insertDoc,Schema.loginFormSchema)
+        self = this
+        Session.set "clapperState","open"
+        Session.set "coverState","message"
+        Meteor.loginWithPassword(
+          insertDoc.usernameOrEmail
+          insertDoc.password
+        ,
+          (err)->
+            if err
+              console.log "err: ",err
+              Session.set "serverError",err.reason
+              self.resetForm()
+              Meteor.setTimeout(->
+                Session.set "coverState","login"
+              1000)
+            else
+              #log "Successfully logged in!"
+              console.log "Successfully signed in!"
+              self.resetForm()
+              Session.set "serverError",undefined
+
+              Meteor.setTimeout(->
+                Session.set "clapperState","closed"
+                Meteor.setTimeout(->
+                  Session.set "hidden",false
+                500)
+              1000)
+        )
+        false
+    topicTitleForm:
+      onSubmit: (insertDoc,updateDoc,currentDoc) ->
+        check(updateDoc,Schema.topicTitleFormSchema)
+        self = this
+        console.log "topicTitleForm submitted!!!"
+        console.log "insertDoc:",insertDoc
+        console.log "updateDoc:",updateDoc
+        console.log "currentDoc:",currentDoc
+        params = Router.current().params
+        #Get the topic ID from the URL param and update the title
+        Topics.update(
+          _id: params["topic"]
+        ,
+          updateDoc
+        ,
+          (err,result) ->
+            if err
+              console.log "err: ",err
+            else
+              console.log "result: ",result
+        )
+        false
+
   #Handle Key Events
   $(document).keyup (e) ->
     key = e.which
@@ -400,6 +443,7 @@ if Meteor.isClient
 
   Template.editableTopic.rendered = () ->
     editor = this.$(".editor")[0]
+    console.log "HOLY SHIT I'M BEING RENDERED LOOK AT ME AND PAY ATTENTION TO ME GOD FUCKING DAMN IT JESUS CHRIST"
     #console.log "topic this",this
     if editor
       this._editor =
@@ -413,10 +457,13 @@ if Meteor.isClient
       $(editor).html(this.data.body)
 
   Template.editableTopic.events
+    #"submit #topicTitleForm":(e,t)->
+      #console.log "yo"
+      #false
     "input .editor":(e,t)->
       #Stop the event from bubbling
       e.preventDefault()
-      e.stopImmediatePropagation()
+      #e.stopImmediatePropagation()
       #console.log "Input!!!!!"
       #console.log "this",this
       self = this
@@ -493,10 +540,10 @@ if Meteor.isClient
       #will be reliable.
       self = UI.getElementData(clickableTarget[0])
 
-      console.log "======================================="
-      console.log "currentTarget",currentTarget
-      console.log "clickableTarget",clickableTarget
-      console.log "mousedown self",self
+      #console.log "======================================="
+      #console.log "currentTarget",currentTarget
+      #console.log "clickableTarget",clickableTarget
+      #console.log "mousedown self",self
 
       #console.log "mousedown currentTarget:",currentTarget
 
@@ -692,7 +739,7 @@ if Meteor.isClient
       currentTarget = $(e.currentTarget)
       action = currentTarget.data("action")
       window.totalDistance = 0
-      #console.log "action: ",action
+      console.log "action: ",action
       #console.log "MouseUpThis:",this
       #console.log "t:",t
       #Trigger different actions based on user input
@@ -852,7 +899,6 @@ if Meteor.isClient
               subtitle: user.username
               body: "SOMETHING SOMETHING COMMENT"
             , (err, result) ->
-                console.log "Insert callback!"
                 if err
                   console.log "err: ",err
                 else
@@ -879,12 +925,40 @@ if Meteor.isClient
               subtitle: user.username
               body: "SOMETHING SOMETHING CHILD CHILD COMMENT YAY WHOOOO"
             , (err, result) ->
-              console.log "Insert callback!"
               if err
                 console.log "err: ",err
               else
                 console.log "Insert succeeded!"
                 console.log "result:",result
+      if action is "addTopic"
+        console.log "addingTopic!"
+        user = Meteor.user()
+        params = Router.current().params
+        if user
+          Topics.insert
+            context: params["owner"]
+            owner: user._id
+            title: "Give your topic a name"
+            subtitle: user.username
+            body: "Tell us what you want to talk about!"
+          , (err, result) ->
+            if err
+              console.log "err: ",err
+            else
+              console.log "Topic successfully created!"
+              console.log "result:",result
+              #When the user creates the topic, redirect them to that page
+              Router.go "profileCommunity",
+                owner: params["owner"]
+                content: params["content"]
+                topic: result
+      if action is "viewTopic"
+        console.log "viewingTopic!"
+        params = Router.current().params
+        Router.go "profileCommunity",
+          owner: params["owner"]
+          content: params["content"]
+          topic: Session.get("currentContent")
 
     "mouseup":(e,t)->
       #console.log "mouseup"
@@ -908,121 +982,6 @@ if Meteor.isClient
     users: Meteor.subscribe "allUsers"
     topics: Meteor.subscribe "allTopics"
     comments: Meteor.subscribe "allComments"
-
-  #AutoForm Settings
-  AutoForm.setDefaultTemplate("plain")
-
-  #Set up AutoForm Hooks
-  AutoForm.hooks
-    signupForm:
-      onSubmit: (insertDoc,updateDoc,currentDoc) ->
-        check(insertDoc,Schema.signupFormSchema)
-        self = this
-        console.log "signupForm validating!"
-        console.log "insertDoc:",insertDoc
-        console.log "updateDoc:",updateDoc
-        console.log "currentDoc:",currentDoc
-        Session.set "clapperState","open"
-        Session.set "coverState","message"
-        Accounts.createUser(
-          insertDoc
-        ,
-          (err)->
-            if err
-              console.log "err: ",err
-              Session.set "serverError",err.reason
-              self.resetForm()
-              Meteor.setTimeout(->
-                Session.set "coverState","signup"
-              1000)
-            else
-              console.log "Successfully signed up!"
-              #Reset the form for future logins, and clear the serverError messages, if there are any
-              self.resetForm()
-              Session.set "serverError",undefined
-              #If login or signup is successful, close the clapper, and hide the cover
-              Meteor.setTimeout(->
-                Session.set "clapperState","closed"
-                #Close the cover
-                Meteor.setTimeout(->
-                  Session.set "hidden",false
-                  #Session.set "clapperState","open"
-                500)
-              1000)
-        )
-        return false
-    loginForm:
-      onSubmit: (insertDoc,updateDoc,currentDoc) ->
-        check(insertDoc,Schema.loginFormSchema)
-        self = this
-        Session.set "clapperState","open"
-        Session.set "coverState","message"
-        Meteor.loginWithPassword(
-          insertDoc.usernameOrEmail
-          insertDoc.password
-        ,
-          (err)->
-            if err
-              console.log "err: ",err
-              Session.set "serverError",err.reason
-              self.resetForm()
-              Meteor.setTimeout(->
-                Session.set "coverState","login"
-              1000)
-            else
-              #log "Successfully logged in!"
-              console.log "Successfully signed in!"
-              self.resetForm()
-              Session.set "serverError",undefined
-
-              Meteor.setTimeout(->
-                Session.set "clapperState","closed"
-                Meteor.setTimeout(->
-                  Session.set "hidden",false
-                500)
-              1000)
-        )
-        false
-    usernameForm:
-      onSubmit: (insertDoc,updateDoc,currentDoc) ->
-        console.log "titleForm submitted!!!"
-        console.log "insertDoc:",insertDoc
-        console.log "updateDoc:",updateDoc
-        console.log "currentDoc:",JSON.stringify(currentDoc)
-        console.log "updateDocString:",JSON.stringify(updateDoc)
-        console.log "this:",this
-        Meteor.users.update
-          _id: currentDoc._id
-        ,
-          updateDoc
-        ,
-          (err,result) ->
-            if err
-              console.log "err: ",err
-            else
-              console.log "result: ",result
-              Session.set "editing",false
-        false
-    roleForm:
-      onSubmit: (insertDoc,updateDoc,currentDoc) ->
-        console.log "titleForm submitted!!!"
-        console.log "insertDoc:",insertDoc
-        console.log "updateDoc:",updateDoc
-        console.log "currentDoc:",JSON.stringify(currentDoc)
-        console.log "updateDocString:",JSON.stringify(updateDoc)
-        console.log "this:",this
-        Meteor.users.update
-          _id: currentDoc._id
-        ,
-          updateDoc
-        ,
-          (err,result) ->
-            if err
-              console.log "err: ",err
-            else
-              console.log "result: ",result
-              Session.set "editing",false
-        false
 
 if Meteor.isServer
   console.log "Server"
@@ -1098,9 +1057,10 @@ if Meteor.isServer
     user.profile.community = {}
     #user.profile.community.topics = []
     Topics.insert
-      title: "What are you making next?"
+      title: "Welcome to your personal community!"
+      context: user._id
       subtitle: user.username
-      body: "What would you like to see next?"
+      body: "This body text will explain to you how to use the community."
       owner: user._id
     , (err, result) ->
       console.log "Insert callback!"
@@ -1109,25 +1069,6 @@ if Meteor.isServer
       else
         console.log "Insert succeeded!"
         console.log "result: ",result
-        #user.profile.community.topics.push result
-
-    #user.profile.projects = []
-    #user.profile = {}
-    #user.profile.creations = []
-    #user.profile.profileSrc = "/users/defaults/profileImage.png"
-    #user.profile.profileCoverSrc = "/users/defaults/profileCover.png"
-    #user.profile.description =
-    #  "#{user.username} hasn't updated their default profile information yet, but we can rest assured that they shall surely do so in the near future by merely hovering over this text, clicking to edit it, and than typing whatever their hearts may desire. They just need to click elsewhere on the page and we'll handle the rest. Cheerio!"
-    #user.profile.stripeCustomerId = undefined
-    #user.profile.favorites = []
-    #user.profile.following = []
-    #user.profile.followers = []
-    #user.profile.playing = undefined
-    #user.profile.cinderAppSessions = []
-    #log "user.ownerSlug: ",user.ownerSlug
-    #We still want the default hook's 'profile' behavior.
-    #if options.profile
-    #  user.profile = options.profile
     user
 
   #Check that doc fits with business logic

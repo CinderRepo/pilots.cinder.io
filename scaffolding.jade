@@ -49,14 +49,14 @@ template(name="clickMenu")
               .dot
                 .dotInner
                   .iconWrapper
-                    +profileIcon
+                    +signupIcon
                   .title Signup
           if coverStateIsnt "login"
             .node.inner.top.second(data-action="login")
               .dot
                 .dotInner
                   .iconWrapper
-                    +profileIcon
+                    +loginIcon
                   .title Login
         else
           .node.inner.top.first(data-action="profileAbout")
@@ -69,7 +69,7 @@ template(name="clickMenu")
             .dot
               .dotInner
                 .iconWrapper
-                  +profileIcon
+                  +logoutIcon
                 .title Logout
     //-.node.outer.top(data-action="account")
       .dot
@@ -260,6 +260,19 @@ template(name="clickMenu")
             .iconWrapper
               +addIcon
             .title Reply
+    if menuIs "listableTopic"
+      .node.outer.bottom.left(data-action="viewTopic")
+        .dot
+          .dotInner
+            .iconWrapper
+              +viewIcon
+            .title View Topic
+      .node.outer.bottom.right(data-action="addTopic")
+        .dot
+          .dotInner
+            .iconWrapper
+              +addIcon
+            .title Add Topic
 
 
 template(name="cover")
@@ -569,6 +582,8 @@ template(name="profileCommunity")
     .currentTopic
       with currentTopic
         //-.section(data-state=focused)= username
+          h1 INVALID? {{#if afFieldIsInvalid name='title'}}INVALID{{/if}}
+          {{{afFieldMessage name="title"}}}
         if isEditable owner
           +editableTopic
         else
@@ -581,29 +596,17 @@ template(name="profileCommunity")
 
     .topics
       each topics
-        +topic
-
-//-template(name="topic")
-  .topic
-    h1 Hello
-    //-if isEditable value
-      h1 HELLO
-      h2 {{title}}
-      //-+UI.contentBlock
-      .description.editor.clickable(data-menu="topic")
-        {{{body}}}
-    //-else
-      .description.clickable(data-menu="topic")
-        {{{body}}}
+        +listableTopic
 
 template(name="topic")
-  .topic.clickable(data-state="{{focused _id}}",data-menu="topic",style="margin-left:{{position ancestors}}px")
-    if title
-      .title= title
-    .avatar(style="background-image:url('andrew.png');")
-    .author= subtitle
-    .description
-      {{{body}}}
+  .topic.clickable(data-state="{{focused _id}}",data-menu="topic")
+    .bounds(style="padding-left:{{position ancestors}}px")
+      if title
+        .title= title
+      .avatar(style="background-image:url('andrew.png');")
+      .author= subtitle
+      .description
+        {{{body}}}
   each topicComments
     with this
       if isEditable owner
@@ -612,19 +615,34 @@ template(name="topic")
         +topic
 
 template(name="editableTopic")
-  .topic.clickable(data-state="{{focused _id}}",data-menu="topic",style="margin-left:{{position ancestors}}px")
-    if title
-      .title= title
-    .avatar(style="background-image:url('andrew.png');")
-    .author= subtitle
-    .description.editor
-      {{{body}}}
+  .topic.clickable(data-state="{{focused _id}}",data-menu="topic")
+    .bounds(style="padding-left:{{position ancestors}}px")
+      if title
+        +autoForm id="topicTitleForm" schema=Schema.topicTitleFormSchema validation="keyup"
+          +afFieldInput class="title" name="title" type="text" placeholder="Title" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value=title
+          button(type="submit")
+          //-.coverFormInputWrapper.first(data-state="{{#if afFieldIsInvalid name='title'}}error{{/if}}")
+          //-.coverFormMessage(data-state="{{#if afFieldIsInvalid name='title'}}active{{/if}}")
+            {{{afFieldMessage name="title"}}}
+        //-.title= title
+      .avatar(style="background-image:url('andrew.png');")
+      .author= subtitle
+      .description.editor
+        {{{body}}}
   each editableTopicComments
     with this
       if isEditable owner
         +editableTopic
       else
         +topic
+
+template(name="listableTopic")
+  .topic.clickable(data-state="{{focused _id}}",data-menu="listableTopic",data-href=_id)
+    .title= title
+    .avatar(style="background-image:url('andrew.png');")
+    .author= subtitle
+    .description
+      {{{body}}}
 
 //-Icons
 template(name="fundIcon")
@@ -686,7 +704,16 @@ template(name="profileIcon")
   svg.icon(viewBox="0 0 100 100")
     path.iconFill(d="M100,50.065c0,0-20.131,34.743-50.002,34.743C20.125,84.809,0,50.065,0,50.065s20.125-34.874,49.998-34.874C79.869,15.191,100,50.065,100,50.065z M74.484,50.065c0-13.462-11.025-24.487-24.487-24.487S25.509,36.603,25.509,50.065s11.027,24.487,24.488,24.487S74.484,63.528,74.484,50.065z M49.998,39.04c-6.024,0-10.898,5.128-10.898,11.025c0,6.025,4.874,10.897,10.898,10.897c5.9,0,11.026-4.872,11.026-10.897C61.023,44.168,55.897,39.04,49.998,39.04z")
 
+template(name="signupIcon")
+  svg.icon(viewBox="0 0 100 100")
+
 template(name="loginIcon")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="logoutIcon")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="viewIcon")
   svg.icon(viewBox="0 0 100 100")
 
 template(name="accountIcon")
