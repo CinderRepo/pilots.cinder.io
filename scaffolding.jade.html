@@ -568,13 +568,16 @@ template(name="profileCommunity")
   .community
     .currentTopic
       with currentTopic
-        .section(data-state=focused)= username
+        //-.section(data-state=focused)= username
         if isEditable owner
           +editableTopic
         else
           +topic
       each childTopics
-        +topic
+        if isEditable owner
+          +editableTopic
+        else
+          +topic
 
     .topics
       each topics
@@ -594,37 +597,34 @@ template(name="profileCommunity")
         {{{body}}}
 
 template(name="topic")
-  .topic(data-state="{{focused _id}}")
+  .topic.clickable(data-state="{{focused _id}}",data-menu="topic")
     if title
       .title= title
     .avatar(style="background-image:url('andrew.png');")
     .author= subtitle
-    .description.clickable(data-menu="topic")
+    .description
       {{{body}}}
-
-    //-.description.editor.clickable(data-menu="topic")
-      {{{editableBody}}}
-      //-= body
-      //-= content
-      //-= body
-      //-= content
-      //-+editor
   each topicComments
     with this
-      +topic
+      if isEditable owner
+        +editableTopic
+      else
+        +topic
 
 template(name="editableTopic")
-  .topic(data-state="{{focused _id}}")
+  .topic.clickable(data-state="{{focused _id}}",data-menu="topic")
     if title
       .title= title
     .avatar(style="background-image:url('andrew.png');")
     .author= subtitle
-    .description.editor.clickable(data-menu="topic")
+    .description.editor
       {{{body}}}
-
-//-template(name="editor")
-  .editor(data-state="{{focused _id}}",data-menu="addMedia")
-    {{{content}}}
+  each editableTopicComments
+    with this
+      if isEditable owner
+        +editableTopic
+      else
+        +topic
 
 //-Icons
 template(name="fundIcon")
