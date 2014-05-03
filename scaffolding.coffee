@@ -123,6 +123,7 @@ UI.registerHelper "position", (context,value) ->
 @Projects = new Meteor.Collection "projects"
 @Topics = new Meteor.Collection "topics"
 @Comments = new Meteor.Collection "comments"
+#@reactiveUpdatedCalled = false
 
 #Projects Helpers
 
@@ -204,9 +205,6 @@ Router.map ->
       projects: Projects.find()
   @route "profileCommunity",
     path: "/users/:owner/profileCommunity/:topic"
-    onBeforeAction: ->
-      console.log "Profile Community"
-      console.log "Change Famous Application Here!"
     data: ->
       params = @.params
       user = Meteor.users.findOne(params.owner)
@@ -214,6 +212,13 @@ Router.map ->
       currentTopic: Topics.findOne(params.topic)
       childTopics: Comments.find(topic:params.topic,parent:null)
       topics: Topics.find(context:params.owner)
+    action: ->
+      if this.ready()
+        #Fire the reactive update once.
+        $(".editor").trigger("reactive-update")
+        this.render()
+      else
+        console.log "Waiting to load!"
 
 #Form Validations (Client and Server)
 #Specifiy the valid formats for data submitted from the signup form.
@@ -319,6 +324,7 @@ if Meteor.isClient
   Session.setDefault "editing",false
   Session.setDefault "property",null
   Session.setDefault "focused",null
+  Session.setDefault "pageLoading",true
 
   #Allow for fastclick on mobile devices
   window.addEventListener "load", (->
@@ -442,11 +448,14 @@ if Meteor.isClient
         parent: this._id
 
   Template.editableTopic.rendered = () ->
-    editor = this.$(".editor")[0]
-    console.log "HOLY SHIT I'M BEING RENDERED LOOK AT ME AND PAY ATTENTION TO ME GOD FUCKING DAMN IT JESUS CHRIST"
+    #console.log "editableTopic Rendered!"
+    #console.log "HOLY SHIT I'M BEING RENDERED LOOK AT ME AND PAY ATTENTION TO ME GOD FUCKING DAMN IT JESUS CHRIST"
     #console.log "topic this",this
-    if editor
-      this._editor =
+    self = this
+    editor = self.$(".editor")[0]
+    #console.log "editableTopic self"
+    if editor and self._editor is undefined
+      self._editor =
         new MediumEditor(
           editor
         ,
@@ -454,12 +463,17 @@ if Meteor.isClient
           disableDoubleReturn:true
           #placeholder:this.data.body
         )
-      $(editor).html(this.data.body)
+      self.$(editor).html(self.data.body)
 
   Template.editableTopic.events
-    #"submit #topicTitleForm":(e,t)->
-      #console.log "yo"
-      #false
+    "reactive-update .editor":(e,t)->
+      #This is a temporary workaround for templates not reactively-rerendering when data contexts change. Only fire when the page is loading.
+      self = this
+      editor = e.currentTarget
+      #if reactiveUpdatedCalled is false
+      if Session.equals("pageLoading",true)
+        Session.set("pageLoading",false)
+        t.$(editor).html(self.body)
     "input .editor":(e,t)->
       #Stop the event from bubbling
       e.preventDefault()
@@ -467,7 +481,7 @@ if Meteor.isClient
       #console.log "Input!!!!!"
       #console.log "this",this
       self = this
-      console.log "self",self
+      #console.log "self",self
       #console.log "t",t
       currentTarget = $(e.currentTarget)
       #console.log "currentTarget",currentTarget
@@ -500,8 +514,8 @@ if Meteor.isClient
         )
       else
         #It's a top level topic, update the topic.
-        console.log "Top Level!"
-        console.log "self._id",self._id
+        #console.log "Top Level!"
+        #console.log "self._id",self._id
         Topics.update(
           self._id
         ,
@@ -739,7 +753,7 @@ if Meteor.isClient
       currentTarget = $(e.currentTarget)
       action = currentTarget.data("action")
       window.totalDistance = 0
-      console.log "action: ",action
+      #console.log "action: ",action
       #console.log "MouseUpThis:",this
       #console.log "t:",t
       #Trigger different actions based on user input
@@ -953,12 +967,14 @@ if Meteor.isClient
                 content: params["content"]
                 topic: result
       if action is "viewTopic"
-        console.log "viewingTopic!"
+        #console.log "viewingTopic!"
         params = Router.current().params
+        #$(".editor").trigger("reactive-update")
         Router.go "profileCommunity",
           owner: params["owner"]
           content: params["content"]
           topic: Session.get("currentContent")
+        Session.set("pageLoading",true)
 
     "mouseup":(e,t)->
       #console.log "mouseup"

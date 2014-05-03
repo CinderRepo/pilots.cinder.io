@@ -20,7 +20,7 @@ template(name="layout")
     if routeIsProfile
       .videoWrapper
         video.video.clickable(src="jesse.mp4")
-        .banner.profileCover(style="background-image:url('jesse.png');")
+        .banner.profileCover
   //-.toggle.left(data-action="toggleSidebar",data-sidebar="left")
   //-.toggle.right(data-action="toggleSidebar",data-sidebar="right")
   .firstPane
@@ -603,7 +603,7 @@ template(name="topic")
     .bounds(style="padding-left:{{position ancestors}}px")
       if title
         .title= title
-      .avatar(style="background-image:url('andrew.png');")
+      .avatar
       .author= subtitle
       .description
         {{{body}}}
@@ -625,7 +625,7 @@ template(name="editableTopic")
           //-.coverFormMessage(data-state="{{#if afFieldIsInvalid name='title'}}active{{/if}}")
             {{{afFieldMessage name="title"}}}
         //-.title= title
-      .avatar(style="background-image:url('andrew.png');")
+      .avatar
       .author= subtitle
       .description.editor
         {{{body}}}
@@ -639,7 +639,7 @@ template(name="editableTopic")
 template(name="listableTopic")
   .topic.clickable(data-state="{{focused _id}}",data-menu="listableTopic",data-href=_id)
     .title= title
-    .avatar(style="background-image:url('andrew.png');")
+    .avatar
     .author= subtitle
     .description
       {{{body}}}
