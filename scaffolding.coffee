@@ -324,7 +324,7 @@ if Meteor.isClient
   Session.setDefault "editing",false
   Session.setDefault "property",null
   Session.setDefault "focused",null
-  Session.setDefault "pageLoading",true
+  Session.setDefault "pageInited",false
 
   #Allow for fastclick on mobile devices
   window.addEventListener "load", (->
@@ -470,9 +470,8 @@ if Meteor.isClient
       #This is a temporary workaround for templates not reactively-rerendering when data contexts change. Only fire when the page is loading.
       self = this
       editor = e.currentTarget
-      #if reactiveUpdatedCalled is false
-      if Session.equals("pageLoading",true)
-        Session.set("pageLoading",false)
+      if Session.equals("pageInited",false)
+        Session.set("pageInited",true)
         t.$(editor).html(self.body)
     "input .editor":(e,t)->
       #Stop the event from bubbling
@@ -966,7 +965,7 @@ if Meteor.isClient
                 owner: params["owner"]
                 content: params["content"]
                 topic: result
-              Session.set("pageLoading",true)
+              Session.set("pageInited",false)
       if action is "viewTopic"
         #console.log "viewingTopic!"
         params = Router.current().params
@@ -975,7 +974,7 @@ if Meteor.isClient
           owner: params["owner"]
           content: params["content"]
           topic: Session.get("currentContent")
-        Session.set("pageLoading",true)
+        Session.set("pageInited",false)
 
     "mouseup":(e,t)->
       #console.log "mouseup"
