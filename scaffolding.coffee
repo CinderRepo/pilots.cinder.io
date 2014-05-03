@@ -966,6 +966,7 @@ if Meteor.isClient
                 owner: params["owner"]
                 content: params["content"]
                 topic: result
+              Session.set("pageLoading",true)
       if action is "viewTopic"
         #console.log "viewingTopic!"
         params = Router.current().params
