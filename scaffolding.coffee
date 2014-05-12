@@ -118,12 +118,26 @@ UI.registerHelper "position", (context,value) ->
     context.length * 40
   else
     0
+UI.registerHelper "playing", (context,value) ->
+  Session.get "playing"
 
 #Global Data Collections and Helpers
 @Projects = new Meteor.Collection "projects"
 @Topics = new Meteor.Collection "topics"
 @Comments = new Meteor.Collection "comments"
-#@reactiveUpdatedCalled = false
+
+#File Collections
+@Videos = new FS.Collection("videos",
+  allow:
+    contentTypes: ["video/*"]
+    extensions: ["mp4"]
+  onInvalid: (message) ->
+    if Meteor.isClient
+      console.log "invalid message",message
+    else
+      console.log "invalid message",message
+  stores: [new FS.Store.GridFS("videos")]
+)
 
 #Projects Helpers
 
@@ -176,18 +190,22 @@ Router.map ->
       params = @.params
       currentContent: Projects.findOne(params.content)
   @route "contentCommunity",
-    path: "/users/:owner/:content/community"
-    #yieldTemplates:
-    #  leftSidebar:
-    #    to: "leftSidebar"
-    #  rightSidebar:
-    #    to: "rightSidebar"
-    onBeforeAction: ->
-      console.log "Community Page"
-      console.log "Change Famous Application Here!"
+    path: "/users/:owner/:content/community/:topic"
+    template: "community"
     data: ->
       params = @.params
-      currentContent: Projects.findOne(params.content)
+      project = Projects.findOne(params.content)
+      currentProfile: project
+      currentTopic: Topics.findOne(params.topic)
+      childTopics: Comments.find(topic:params.topic,parent:null)
+      topics: Topics.find(context:params.content)
+    action: ->
+      if this.ready()
+        #Fire the reactive update once.
+        $(".editor").trigger("reactive-update")
+        this.render()
+      else
+        console.log "Waiting to load!"
   @route "profileAbout",
     path: "/users/:owner/about"
     onBeforeAction: ->
@@ -198,17 +216,20 @@ Router.map ->
       #console.log "@owner: ",@.params.owner
       params = @.params
       #console.log "params.owner:",params.owner
-      user = Meteor.users.findOne(params.owner)
+      #user = Meteor.users.findOne(params.owner)
       #console.log "user",user
       #profileProjects: Projects.find()
-      currentProfile: user
-      projects: Projects.find()
+      currentProfile: Meteor.users.findOne(params.owner)
+      projects: Projects.find
+        owner: params.owner
+      video: Videos.findOne("c2BPstkbWrC4vguHD")
   @route "profileCommunity",
     path: "/users/:owner/profileCommunity/:topic"
+    template: "community"
     data: ->
       params = @.params
-      user = Meteor.users.findOne(params.owner)
-      currentProfile: user
+      #user = Meteor.users.findOne(params.owner)
+      #currentProfile: user
       currentTopic: Topics.findOne(params.topic)
       childTopics: Comments.find(topic:params.topic,parent:null)
       topics: Topics.find(context:params.owner)
@@ -325,6 +346,7 @@ if Meteor.isClient
   Session.setDefault "property",null
   Session.setDefault "focused",null
   Session.setDefault "pageInited",false
+  Session.setDefault "playing",false
 
   #Allow for fastclick on mobile devices
   window.addEventListener "load", (->
@@ -530,6 +552,18 @@ if Meteor.isClient
 
   #Events
   Template.layout.events
+    "change #fileUploader":(e,t)->
+      console.log "fileUpload Changed!"
+      FS.Utility.eachFile event, (file) ->
+        console.log "Running per file!"
+        Videos.insert file, (err, fileObj) ->
+          console.log "Inserting File!"
+          if err
+            console.log "err",err
+          else
+            console.log "fileObj",fileObj
+
+#Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
     "mousedown":(e,t)->
       #alert "MOUSEDOWN"
       #console.log "FUCKING MOUSEDOWN"
@@ -555,13 +589,13 @@ if Meteor.isClient
 
       #console.log "======================================="
       #console.log "currentTarget",currentTarget
-      #console.log "clickableTarget",clickableTarget
+      console.log "clickableTarget",clickableTarget
       #console.log "mousedown self",self
 
       #console.log "mousedown currentTarget:",currentTarget
 
       menu = clickableTarget.attr("data-menu")
-      #console.log "menu: ",menu
+      console.log "menu: ",menu
       #if menu
       Session.set "menu",menu
 
@@ -771,6 +805,20 @@ if Meteor.isClient
             else
               console.log "Insert succeeded!"
               console.log "result: ",result
+              #Insert a default topic
+              Topics.insert
+                title: "Welcome to your film!"
+                context: result
+                subtitle: user.username
+                body: "This body text will explain to you how to use the community in this film."
+                owner: user._id
+              , (err, result) ->
+                console.log "Insert callback!"
+                if err
+                  console.log "err: ",err
+                else
+                  console.log "Insert succeeded!"
+                  console.log "result: ",result
               Router.go "contentAbout",
                 owner: Meteor.userId()
                 content: result
@@ -783,21 +831,24 @@ if Meteor.isClient
         Router.go "about"
         #$(".video")[0].play()
       if action is "contentAbout"
-        console.log "contentThis:",this
+        console.log "contentAbout:"
         #Grab the current content from the session variable
         params = Router.current().params
+        currentContent = Session.get("currentContent")
+        console.log "currentContent",currentContent
         content = Projects.findOne owner:params["owner"]
         console.log "content:",content
         Router.go "contentAbout",
           owner: content.owner
-          content: content._id
+          content: currentContent
         #$(".video")[0].pause()
       if action is "contentCommunity"
         params = Router.current().params
-        content = Projects.findOne owner:params["owner"]
+        mostRecentTopic = Topics.findOne(context:params["content"])
         Router.go "contentCommunity",
-          owner: content.owner
-          content: content._id
+          owner: params["owner"]
+          content: params["content"]
+          topic: mostRecentTopic._id
         #$(".video")[0].pause()
       if action is "edit"
         console.log "Doing editing stuff"
@@ -948,33 +999,71 @@ if Meteor.isClient
         user = Meteor.user()
         params = Router.current().params
         if user
-          Topics.insert
-            context: params["owner"]
-            owner: user._id
-            title: "Give your topic a name"
-            subtitle: user.username
-            body: "Tell us what you want to talk about!"
-          , (err, result) ->
-            if err
-              console.log "err: ",err
-            else
-              console.log "Topic successfully created!"
-              console.log "result:",result
-              #When the user creates the topic, redirect them to that page
-              Router.go "profileCommunity",
-                owner: params["owner"]
-                content: params["content"]
-                topic: result
-              Session.set("pageInited",false)
+          #We are in a user community, add to user page
+          if params["content"] is undefined
+            Topics.insert
+              context: params["owner"]
+              owner: user._id
+              title: "Give your topic a name"
+              subtitle: user.username
+              body: "Tell us what you want to talk about!"
+            , (err, result) ->
+              if err
+                console.log "err: ",err
+              else
+                console.log "Topic successfully created!"
+                console.log "result:",result
+                #When the user creates the topic, redirect them to that page
+                Router.go "profileCommunity",
+                  owner: params["owner"]
+                  content: params["content"]
+                  topic: result
+                Session.set("pageInited",false)
+          else
+            #We are in a film community, add to film page
+            Topics.insert
+              context: params["content"]
+              owner: user._id
+              title: "This is a new film topic"
+              subtitle: user.username
+              body: "You made a new film topic! Yay!"
+            , (err, result) ->
+              if err
+                console.log "err",err
+              else
+                console.log "result:",result
+                Router.go "contentCommunity",
+                  owner: params["owner"]
+                  content: params["content"]
+                  topic: result
+                Session.set("pageInited",false)
       if action is "viewTopic"
         #console.log "viewingTopic!"
         params = Router.current().params
         #$(".editor").trigger("reactive-update")
-        Router.go "profileCommunity",
-          owner: params["owner"]
-          content: params["content"]
-          topic: Session.get("currentContent")
-        Session.set("pageInited",false)
+        #Determine if we're in a film or user community by checking for whether
+        #the url has a content param.
+        if params["content"] is undefined
+          #We are in a user community, post redirect to profile page
+          Router.go "profileCommunity",
+            owner: params["owner"]
+            content: params["content"]
+            topic: Session.get("currentContent")
+          Session.set("pageInited",false)
+        else
+          #We are in a content community, redirect to content page
+          Router.go "contentCommunity",
+            owner: params["owner"]
+            content: params["content"]
+            topic: Session.get("currentContent")
+          Session.set("pageInited",false)
+      if action is "uploadVideo"
+        console.log "Uploading Video!"
+        $("#fileUploader").click()
+      if action is "playVideo"
+        console.log "Playing Video"
+        $("#video")[0].play()
+        Session.set "playing",true
 
     "mouseup":(e,t)->
       #console.log "mouseup"
@@ -998,6 +1087,7 @@ if Meteor.isClient
     users: Meteor.subscribe "allUsers"
     topics: Meteor.subscribe "allTopics"
     comments: Meteor.subscribe "allComments"
+    videos: Meteor.subscribe "allVideos"
 
 if Meteor.isServer
   console.log "Server"
@@ -1046,6 +1136,19 @@ if Meteor.isServer
     update: () ->
       true
     remove: () ->
+      true
+
+  Meteor.publish "allVideos", ->
+    Videos.find()
+
+  Videos.allow
+    insert: () ->
+      true
+    update: () ->
+      true
+    remove: () ->
+      true
+    download: (userId,file)->
       true
 
   #We check the schema again on the server to be sure that we're not

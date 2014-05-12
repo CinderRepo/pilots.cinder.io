@@ -7,17 +7,23 @@ head
 body
 
 template(name="layout")
+  input#fileUploader(name="fileUploader" type="file")
   //-+yield(region="leftSidebar")
   //-.content
   .player
-    .logo
-      +pilotsIcon
-    if routeIsContent
+    .banner.clickable(data-menu="video")
+      .logo
+        +pilotsIcon
+      .videoWrapper
+        with video
+          video#video.video(src=url)
+          //-img.tester(src="{{url}}")
+    //-if routeIsContent
       with currentContent
         video.video.clickable(src=videoSrc)
         if contentIs "delmer.mp4"
           .banner.contentCover(style=previewSrc)
-    if routeIsProfile
+    //-if routeIsProfile
       .videoWrapper
         video.video.clickable(src="jesse.mp4")
         .banner.profileCover
@@ -273,6 +279,19 @@ template(name="clickMenu")
             .iconWrapper
               +addIcon
             .title Add Topic
+    if menuIs "video"
+      .node.outer.bottom.left(data-action="uploadVideo")
+        .dot
+          .dotInner
+            .iconWrapper
+              +uploadVideoIcon
+            .title Upload Video
+      .node.outer.bottom.right(data-action="playVideo")
+        .dot
+          .dotInner
+            .iconWrapper
+              +playIcon
+            .title Play Video
 
 
 template(name="cover")
@@ -344,208 +363,17 @@ template(name="contentAbout")
     .pane
       | Image
 
-template(name="contentCommunity")
-  .community
-    with currentContent
-      .currentTopic
-        .section(data-menu="edit",data-state=focused)= title
-        .slider
-          .topic
-            .title(data-menu="edit",data-state=focused) What's your favorite part?
-            .avatar(data-state=focused,style="background-image:url('andrew.png');")
-            .author(data-state=focused) Andrew Guardamano
-            .description(data-menu="edit",data-state=focused)
-              | The community feature will be an important
-              | part of the platform, and will allow users to
-              | post threads for discussion, place rich media inline,
-              | and put money towards projects at any time, as well as make use of
-              | polls and other useful features.
-          .topic
-            .avatar(style="background-image:url('jesse.png');")
-            .author Jesse Lipscombe
-            .description
-              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-              | Nullam eget congue odio. Nullam quis gravida magna.
-              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-              | mi, vel aliquet diam laoreet id.
-            .topic
-              .avatar(style="background-image:url('peter.png');")
-              .author Peter Baden
-              .description
-                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                | Nullam eget congue odio. Nullam quis gravida magna.
-                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                | mi, vel aliquet diam laoreet id.
-              .topic
-                .avatar(style="background-image:url('andrew.png');")
-                .author Andrew Guardamano
-                .description
-                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                  | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                  | Nullam eget congue odio. Nullam quis gravida magna.
-                  | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                  | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                  | mi, vel aliquet diam laoreet id.
-            .topic
-              .avatar(style="background-image:url('jesse.png');")
-              .author Jesse Lipscombe
-              .description
-                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                | Nullam eget congue odio. Nullam quis gravida magna.
-                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                | mi, vel aliquet diam laoreet id.
-              .topic
-                .avatar(style="background-image:url('peter.png');")
-                .author Peter Baden
-                .description
-                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                  | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                  | Nullam eget congue odio. Nullam quis gravida magna.
-                  | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                  | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                  | mi, vel aliquet diam laoreet id.
-                .topic
-                  .avatar(style="background-image:url('andrew.png');")
-                  .author Andrew Guardamano
-                  .description
-                    | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                    | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                    | Nullam eget congue odio. Nullam quis gravida magna.
-                    | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                    | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                    | mi, vel aliquet diam laoreet id.
-            .topic
-              .avatar(style="background-image:url('jesse.png');")
-              .author Jesse Lipscombe
-              .description
-                | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                | Nullam eget congue odio. Nullam quis gravida magna.
-                | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                | mi, vel aliquet diam laoreet id.
-              .topic
-                .avatar(style="background-image:url('peter.png');")
-                .author Peter Baden
-                .description
-                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                  | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                  | Nullam eget congue odio. Nullam quis gravida magna.
-                  | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                  | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                  | mi, vel aliquet diam laoreet id.
-                .topic
-                  .avatar(style="background-image:url('andrew.png');")
-                  .author Andrew Guardamano
-                  .description
-                    | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                    | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                    | Nullam eget congue odio. Nullam quis gravida magna.
-                    | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                    | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                    | mi, vel aliquet diam laoreet id.
-                .topic
-                  .avatar(style="background-image:url('peter.png');")
-                  .author Peter Baden
-                  .description
-                    | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                    | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                    | Nullam eget congue odio. Nullam quis gravida magna.
-                    | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                    | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                    | mi, vel aliquet diam laoreet id.
-                  .topic
-                    .avatar(style="background-image:url('andrew.png');")
-                    .author Andrew Guardamano
-                    .description
-                      | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                      | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                      | Nullam eget congue odio. Nullam quis gravida magna.
-                      | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                      | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                      | mi, vel aliquet diam laoreet id.
-                    .topic
-                      .avatar(style="background-image:url('peter.png');")
-                      .author Peter Baden
-                      .description
-                        | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                        | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                        | Nullam eget congue odio. Nullam quis gravida magna.
-                        | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                        | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                        | mi, vel aliquet diam laoreet id.
-                      .topic
-                        .avatar(style="background-image:url('andrew.png');")
-                        .author Andrew Guardamano
-                        .description
-                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                          | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                          | Nullam eget congue odio. Nullam quis gravida magna.
-                          | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                          | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                          | mi, vel aliquet diam laoreet id.
-                        .topic
-                          .avatar(style="background-image:url('peter.png');")
-                          .author Peter Baden
-                          .description
-                            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                            | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                            | Nullam eget congue odio. Nullam quis gravida magna.
-                            | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                            | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                            | mi, vel aliquet diam laoreet id.
-                          .topic
-                            .avatar(style="background-image:url('andrew.png');")
-                            .author Andrew Guardamano
-                            .description
-                              | Lorem ipsum dolor sit amet, consectetur adipiscing elit, Integer quis
-                              | condimentum lacus, Maecenas eget porta mi, eu facillisis purus.
-                              | Nullam eget congue odio. Nullam quis gravida magna.
-                              | Cras ac massa suscipit, eleifend lacus sed, adipiscing eros. Vivamus
-                              | ornare metus lacus, ln sollicitudin dui ornare at, Morbi interdum enim
-                              | mi, vel aliquet diam laoreet id.
-
-
-      .topics
-        .topic
-          .title What’s your favorite part?
-          .avatar(style="background-image:url('andrew.png');")
-          .author Andrew Guardamano
-          .description
-            | The Community feature will be an important
-            | part of the platform, and will allow users to
-            | post threads for discussion, place rich media..
-        .topic
-          .title What should we make next?
-          .avatar(style="background-image:url('jesse.png');")
-          .author Jesse Lipscombe
-          .description
-            | The Community feature will be an important
-            | part of the platform, and will allow users to
-            | post threads for discussion, place rich media..
-        .topic
-          .title What’s your favorite part?
-          .avatar(style="background-image:url('andrew.png');")
-          .author Andrew Guardamano
-          .description
-            | The Community feature will be an important
-            | part of the platform, and will allow users to
-            | post threads for discussion, place rich media..
-
 template(name="profileAbout")
-  .profileAbout
+  .profileAbout(data-playing=playing)
     with currentProfile
       each profile.panes
         .pane.clickable(data-menu="edit",data-state=focused)
           .title= title
           .author= subtitle
-          .description= body
+          .description
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis mollis justo, et tempor mi. Duis ut enim id neque gravida ornare in pellentesque lacus. Sed blandit elit vel pretium volutpat. Quisque tristique lacus eu ipsum molestie, vel ultrices urna luctus. Vivamus vitae dapibus eros. Fusce sit amet metus eget dolor molestie volutpat. Suspendisse eu hendrerit quam. Nullam scelerisque, justo at vehicula pretium, ante justo rutrum elit, in convallis ligula risus sit amet lorem.
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis mollis justo, et tempor mi. Duis ut enim id neque gravida ornare in pellentesque lacus. Sed blandit elit vel pretium volutpat. Quisque tristique lacus eu ipsum molestie, vel ultrices urna luctus. Vivamus vitae dapibus eros. Fusce sit amet metus eget dolor molestie volutpat. Suspendisse eu hendrerit quam. Nullam scelerisque, justo at vehicula pretium, ante justo rutrum elit, in convallis ligula risus sit amet lorem.
+          //-.description= body
       //-.pane
         .title.clickable(data-menu="edit",data-property="username",data-state="{{focused 'username'}}")
           .innerText(data-state="{{editing 'username'}}")= username
@@ -571,13 +399,13 @@ template(name="profileAbout")
               .inlineFormMessage(data-state="{{#if afFieldIsInvalid name='profile.bio'}}active{{/if}}")
                 {{{afFieldMessage name="profile.bio"}}}
             button.inlineFormSubmit(type="submit")
-      //-.pane.browse
+      .pane.browse
         .title.clickable(data-state=focused) Creations
         .tiles
           each projects
             +tile
 
-template(name="profileCommunity")
+template(name="community")
   .community
     .currentTopic
       with currentTopic
@@ -711,6 +539,9 @@ template(name="loginIcon")
   svg.icon(viewBox="0 0 100 100")
 
 template(name="logoutIcon")
+  svg.icon(viewBox="0 0 100 100")
+
+template(name="uploadVideoIcon")
   svg.icon(viewBox="0 0 100 100")
 
 template(name="viewIcon")

@@ -34,18 +34,18 @@
       },
       "cfs-gridfs": {
         "git": "https://github.com/CollectionFS/Meteor-cfs-gridfs.git",
-        "tag": "v0.0.20",
-        "commit": "74bbb595eb1269b54fbb6ba482893aca306875f1"
+        "tag": "v0.0.21",
+        "commit": "7e72587c6a7a334b380bbbeff5b2347b7692952b"
       },
       "stripe": {
         "git": "https://github.com/appleifreak/stripe-meteor.git",
-        "tag": "v1.5.3",
-        "commit": "3317f8fea2f2d8283ce9f33f98871ee9ba54c333"
+        "tag": "v1.5.4",
+        "commit": "eb383bd755109d59f2b3446bb53016a6028ea5c8"
       },
       "collection-helpers": {
         "git": "https://github.com/dburles/meteor-collection-helpers.git",
-        "tag": "v0.2.6",
-        "commit": "f04819e9a148fb8992c7a345503167dfb1b9ad3e"
+        "tag": "v0.2.7",
+        "commit": "e25135fa1d70bd93763ac52a2b0a223b03cb7310"
       },
       "medium-editor-updated": {
         "git": "https://github.com/donflopez/meteor-medium-editor.git",
@@ -64,8 +64,8 @@
       },
       "cfs-file": {
         "git": "https://github.com/CollectionFS/Meteor-cfs-file.git",
-        "tag": "v0.1.2",
-        "commit": "61088b38e1267feb44ed67c319d7f7b72886298a"
+        "tag": "v0.1.4",
+        "commit": "118ee62a459f20e48468378d576f0d42e4b15dd7"
       },
       "cfs-collection": {
         "git": "https://github.com/CollectionFS/Meteor-cfs-collection.git",
@@ -109,13 +109,13 @@
       },
       "numeral": {
         "git": "https://github.com/vsivsi/meteor-numeral.git",
-        "tag": "v0.0.1",
-        "commit": "5542b3e87e55f07ae854e8d1b847b3694d66b986"
+        "tag": "v1.5.3",
+        "commit": "bdc97fc69bee7dadae1fc0f97fa6d9d76a03e73d"
       },
       "data-man": {
         "git": "https://github.com/CollectionFS/Meteor-data-man.git",
         "branch": "master",
-        "commit": "eba0055619be2b5dfd7af6b4e946dc6fe393a040"
+        "commit": "c42e97728b38c29522d59db58d290e928df831ba"
       },
       "cfs-upload-ddp": {
         "git": "https://github.com/CollectionFS/Meteor-cfs-upload-ddp.git",
