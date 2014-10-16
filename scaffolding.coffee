@@ -797,7 +797,7 @@ if Meteor.isClient
             title: "My Film"
             body: "My First Film Content!"
             owner: Meteor.userId()
-            published: false
+            published: true
           , (err, result) ->
             console.log "Insert callback!"
             if err
